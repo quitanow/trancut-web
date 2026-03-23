@@ -30,9 +30,14 @@ export default function UploadZone() {
 
     setStage({ type: "checking", file });
 
-    // Measure duration client-side before uploading
-    const duration = await getVideoDuration(file);
-    if (duration > FREE_MAX_SECONDS) {
+    // Measure duration client-side before uploading (best-effort)
+    let duration = 0;
+    try {
+      duration = await getVideoDuration(file);
+    } catch {
+      // Can't read metadata (unusual codec etc.) — let backend enforce limits
+    }
+    if (duration > 0 && duration > FREE_MAX_SECONDS) {
       setStage({
         type: "error",
         message: `Video is ${Math.round(duration)}s — free plan supports up to ${FREE_MAX_SECONDS}s (2 min).`,
