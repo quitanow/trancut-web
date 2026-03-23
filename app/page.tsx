@@ -1,65 +1,148 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { Subtitles, Zap, Globe, Download } from "lucide-react";
+import { useLocale } from "@/components/locale-provider";
+
+export default function LandingPage() {
+  const { t } = useLocale();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
+      {/* Nav */}
+      <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-4 flex justify-between items-center">
+        <span className="font-bold text-lg tracking-tight">TranCut</span>
+        <div className="flex gap-3">
+          <Link
+            href="/login"
+            className="text-sm px-4 py-2 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+          >
+            {t.nav.login}
+          </Link>
+          <Link
+            href="/signup"
+            className="text-sm px-4 py-2 rounded-lg bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
+          >
+            {t.nav.getStarted}
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </nav>
+
+      {/* Hero */}
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full mb-6">
+            <Zap size={12} />
+            {t.hero.badge}
+          </div>
+
+          <h1 className="text-5xl font-bold tracking-tight text-zinc-900 dark:text-white mb-6 leading-tight">
+            {t.hero.title1}
+            <br />
+            <span className="text-blue-600">{t.hero.title2}</span>
+          </h1>
+
+          <p className="text-lg text-zinc-500 dark:text-zinc-400 mb-10 leading-relaxed">
+            {t.hero.subtitle}
+          </p>
+
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Link
+              href="/signup"
+              className="px-6 py-3 bg-zinc-900 text-white rounded-lg font-medium hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
+            >
+              {t.hero.ctaPrimary}
+            </Link>
+            <Link
+              href="/login"
+              className="px-6 py-3 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+            >
+              {t.hero.ctaSecondary}
+            </Link>
+          </div>
+
+          <p className="text-xs text-zinc-400 mt-4">{t.hero.freeNote}</p>
         </div>
       </main>
+
+      {/* Features */}
+      <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-20">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+          <Feature icon={<Subtitles size={22} />} {...t.features.items[0]} />
+          <Feature icon={<Globe size={22} />} {...t.features.items[1]} />
+          <Feature icon={<Download size={22} />} {...t.features.items[2]} />
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-16 text-center">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
+            {t.pricing.title}
+          </h2>
+          <p className="text-zinc-500 dark:text-zinc-400 mb-8">{t.pricing.subtitle}</p>
+          <div className="grid grid-cols-2 gap-4 text-left">
+            <PricingCard {...t.pricing.free} />
+            <PricingCard {...t.pricing.pro} highlight />
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-6 text-center text-xs text-zinc-400">
+        © {new Date().getFullYear()} {t.footer}
+      </footer>
+    </div>
+  );
+}
+
+function Feature({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
+        {icon}
+      </div>
+      <h3 className="font-semibold text-zinc-900 dark:text-white">{title}</h3>
+      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+function PricingCard({
+  tier,
+  price,
+  features,
+  highlight = false,
+}: {
+  tier: string;
+  price: string;
+  features: readonly string[];
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-xl p-5 border ${
+        highlight
+          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30"
+          : "border-zinc-200 dark:border-zinc-700"
+      }`}
+    >
+      <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1">{tier}</div>
+      <div className="font-bold text-zinc-900 dark:text-white mb-4">{price}</div>
+      <ul className="space-y-2">
+        {features.map((f) => (
+          <li key={f} className="text-xs text-zinc-600 dark:text-zinc-400 flex gap-2">
+            <span className="text-green-500">✓</span> {f}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
