@@ -96,6 +96,11 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                 url={job.srt_bilingual_url}
               />
               <DownloadButton
+                label="Chinese SRT only (中文字幕)"
+                description="Traditional Chinese translation"
+                url={job.srt_zh_url}
+              />
+              <DownloadButton
                 label="English SRT only"
                 description="Original transcription"
                 url={job.srt_en_url}

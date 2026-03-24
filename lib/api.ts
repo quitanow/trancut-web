@@ -48,6 +48,7 @@ export interface Job {
   original_filename: string;
   duration_seconds: number | null;
   srt_en_url: string | null;
+  srt_zh_url: string | null;
   srt_bilingual_url: string | null;
   error_message: string | null;
   created_at: string;
