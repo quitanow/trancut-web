@@ -56,13 +56,24 @@ export default function UploadZone() {
 
     try {
       // 1. Get presigned upload URL
-      const { upload_url, r2_key } = await getPresignedUrl(token, file.name, file.type);
+      let upload_url: string, r2_key: string;
+      try {
+        ({ upload_url, r2_key } = await getPresignedUrl(token, file.name, file.type));
+      } catch (err) {
+        setStage({ type: "error", message: `Presign failed: ${(err as Error).message}` });
+        return;
+      }
 
       // 2. Upload directly to R2 (with progress)
       setStage({ type: "uploading", file, progress: 0 });
-      await uploadToR2WithProgress(upload_url, file, (p) =>
-        setStage({ type: "uploading", file, progress: p })
-      );
+      try {
+        await uploadToR2WithProgress(upload_url, file, (p) =>
+          setStage({ type: "uploading", file, progress: p })
+        );
+      } catch (err) {
+        setStage({ type: "error", message: `R2 upload failed: ${(err as Error).message}` });
+        return;
+      }
 
       // 3. Create job
       const job = await createJob(token, r2_key, file.name, Math.round(duration));

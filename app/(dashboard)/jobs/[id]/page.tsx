@@ -90,6 +90,13 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
               <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">
                 Your subtitle files are ready:
               </p>
+              {job.video_dubbed_url && (
+                <DownloadButton
+                  label="Dubbed Video (中文配音)"
+                  description="MP4 with Traditional Chinese voiceover"
+                  url={job.video_dubbed_url}
+                />
+              )}
               <DownloadButton
                 label="Bilingual SRT (EN + 中文)"
                 description="Best for publishing — both languages stacked"
