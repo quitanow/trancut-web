@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import { listJobs, type Job } from "@/lib/api";
-import { CheckCircle, XCircle, Loader2, Film, Plus } from "lucide-react";
+import { CheckCircle, XCircle, Loader2, Film, Plus, Ban } from "lucide-react";
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -77,9 +77,18 @@ export default function JobsPage() {
 }
 
 function StatusIcon({ status }: { status: Job["status"] }) {
-  if (status === "completed")
-    return <CheckCircle size={16} className="text-green-500 shrink-0 ml-4" />;
-  if (status === "failed")
-    return <XCircle size={16} className="text-red-500 shrink-0 ml-4" />;
-  return <Loader2 size={16} className="text-blue-400 animate-spin shrink-0 ml-4" />;
+  const map: Record<Job["status"], { icon: React.ReactNode; label: string; color: string }> = {
+    completed:  { icon: <CheckCircle size={14} />, label: "Done",        color: "text-green-500" },
+    failed:     { icon: <XCircle size={14} />,     label: "Failed",      color: "text-red-500" },
+    cancelled:  { icon: <Ban size={14} />,          label: "Cancelled",   color: "text-zinc-400" },
+    processing: { icon: <Loader2 size={14} className="animate-spin" />, label: "Processing", color: "text-blue-400" },
+    pending:    { icon: <Loader2 size={14} className="animate-spin" />, label: "Pending",    color: "text-zinc-400" },
+  };
+  const { icon, label, color } = map[status] ?? map.pending;
+  return (
+    <span className={`shrink-0 ml-4 flex items-center gap-1.5 text-xs font-medium ${color}`}>
+      {icon}
+      {label}
+    </span>
+  );
 }
