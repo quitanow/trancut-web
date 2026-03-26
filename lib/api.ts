@@ -40,7 +40,7 @@ export async function uploadToR2(uploadUrl: string, file: File) {
 
 // ── Jobs ──────────────────────────────────────────────────────────────────────
 
-export type JobStatus = "pending" | "processing" | "completed" | "failed";
+export type JobStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
 
 export interface Job {
   id: string;
@@ -79,6 +79,10 @@ export async function createJob(
 
 export async function getJob(token: string, jobId: string): Promise<Job> {
   return authFetch(`/jobs/${jobId}`, token);
+}
+
+export async function cancelJob(token: string, jobId: string): Promise<Job> {
+  return authFetch(`/jobs/${jobId}/cancel`, token, { method: "POST" });
 }
 
 export async function listJobs(token: string): Promise<Job[]> {

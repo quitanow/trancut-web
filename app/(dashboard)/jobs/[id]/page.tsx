@@ -3,8 +3,8 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
-import { getJob, type Job } from "@/lib/api";
-import { Download, CheckCircle, XCircle, Loader2, ArrowLeft } from "lucide-react";
+import { getJob, cancelJob, type Job } from "@/lib/api";
+import { Download, CheckCircle, XCircle, Loader2, ArrowLeft, Ban } from "lucide-react";
 
 const POLL_INTERVAL_MS = 3000;
 
@@ -12,6 +12,7 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
   const { id } = use(params);
   const [job, setJob] = useState<Job | null>(null);
   const [error, setError] = useState("");
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -27,6 +28,7 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
         if (data.status === "pending" || data.status === "processing") {
           timer = setTimeout(fetchJob, POLL_INTERVAL_MS);
         }
+
       } catch (err) {
         setError((err as Error).message);
       }
@@ -35,6 +37,21 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
     fetchJob();
     return () => clearTimeout(timer);
   }, [id]);
+
+  async function handleCancel() {
+    setCancelling(true);
+    try {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const updated = await cancelJob(session.access_token, id);
+      setJob(updated);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setCancelling(false);
+    }
+  }
 
   return (
     <div>
@@ -74,14 +91,31 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
           </div>
 
           {(job.status === "pending" || job.status === "processing") && (
-            <div className="flex items-center gap-3 text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl px-5 py-4">
-              <Loader2 size={16} className="animate-spin shrink-0" />
-              <div>
-                <p className="font-medium text-zinc-700 dark:text-zinc-200">
-                  {job.status === "pending" ? "Waiting in queue…" : "Transcribing and translating…"}
-                </p>
-                <p className="text-xs text-zinc-400 mt-0.5">This page updates automatically</p>
+            <div className="flex items-center justify-between gap-3 text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl px-5 py-4">
+              <div className="flex items-center gap-3">
+                <Loader2 size={16} className="animate-spin shrink-0" />
+                <div>
+                  <p className="font-medium text-zinc-700 dark:text-zinc-200">
+                    {job.status === "pending" ? "Waiting in queue…" : "Transcribing and translating…"}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-0.5">This page updates automatically</p>
+                </div>
               </div>
+              <button
+                onClick={handleCancel}
+                disabled={cancelling}
+                className="shrink-0 flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 transition-colors"
+              >
+                <Ban size={13} />
+                {cancelling ? "Cancelling…" : "Cancel"}
+              </button>
+            </div>
+          )}
+
+          {job.status === "cancelled" && (
+            <div className="flex items-start gap-3 text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl px-5 py-4">
+              <Ban size={16} className="mt-0.5 shrink-0" />
+              <p className="font-medium">Job cancelled.</p>
             </div>
           )}
 
@@ -138,12 +172,14 @@ function StatusBadge({ status }: { status: Job["status"] }) {
     processing: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400",
     completed: "bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400",
     failed: "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400",
+    cancelled: "bg-zinc-100 dark:bg-zinc-800 text-zinc-400",
   };
   const icons: Record<Job["status"], React.ReactNode> = {
     pending: <Loader2 size={12} />,
     processing: <Loader2 size={12} className="animate-spin" />,
     completed: <CheckCircle size={12} />,
     failed: <XCircle size={12} />,
+    cancelled: <Ban size={12} />,
   };
   return (
     <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${styles[status]}`}>
