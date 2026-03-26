@@ -20,7 +20,7 @@ type Stage =
 const REWRITE_STYLES = [
   { value: "none",         label: "直接翻譯",   desc: "保留原始翻譯，不加工" },
   { value: "documentary",  label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" },
-  { value: "vivid",        label: "生動口語",   desc: "擴充約50%，通俗解說新科技" },
+  { value: "vivid",        label: "生動口語",   desc: "擴充約50%，通俗解說" },
   { value: "concise",      label: "精簡版",     desc: "保留核心，縮減約30%" },
   { value: "social",       label: "社群短影音", desc: "活潑年輕，吸引新世代受眾" },
 ] as const;
