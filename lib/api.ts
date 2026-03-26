@@ -52,6 +52,7 @@ export interface Job {
   srt_zh_url: string | null;
   srt_bilingual_url: string | null;
   video_dubbed_url: string | null;
+  progress_stage: string | null;
   error_message: string | null;
   created_at: string;
   updated_at: string;

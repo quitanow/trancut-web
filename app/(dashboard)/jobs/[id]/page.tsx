@@ -91,24 +91,33 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
           </div>
 
           {(job.status === "pending" || job.status === "processing") && (
-            <div className="flex items-center justify-between gap-3 text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl px-5 py-4">
-              <div className="flex items-center gap-3">
-                <Loader2 size={16} className="animate-spin shrink-0" />
-                <div>
-                  <p className="font-medium text-zinc-700 dark:text-zinc-200">
-                    {job.status === "pending" ? "Waiting in queue…" : "Transcribing and translating…"}
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl px-5 py-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Loader2 size={16} className="animate-spin shrink-0 text-blue-500" />
+                  <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+                    {job.status === "pending" ? "Waiting in queue…" : stageLabel(job.progress_stage)}
                   </p>
-                  <p className="text-xs text-zinc-400 mt-0.5">This page updates automatically</p>
                 </div>
+                <button
+                  onClick={handleCancel}
+                  disabled={cancelling}
+                  className="shrink-0 flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 transition-colors"
+                >
+                  <Ban size={13} />
+                  {cancelling ? "Cancelling…" : "Cancel"}
+                </button>
               </div>
-              <button
-                onClick={handleCancel}
-                disabled={cancelling}
-                className="shrink-0 flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50 transition-colors"
-              >
-                <Ban size={13} />
-                {cancelling ? "Cancelling…" : "Cancel"}
-              </button>
+
+              {job.status === "processing" && (
+                <ProgressSteps stage={job.progress_stage} />
+              )}
+
+              <p className="text-xs text-zinc-400">
+                {job.status === "pending"
+                  ? "Your job will start shortly."
+                  : estimatedTime(job.duration_seconds, job.progress_stage)}
+              </p>
             </div>
           )}
 
@@ -162,6 +171,62 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+const STAGES = [
+  { key: "downloading",  label: "Downloading video" },
+  { key: "transcribing", label: "Transcribing audio" },
+  { key: "translating",  label: "Translating to Chinese" },
+  { key: "rewriting",    label: "Applying style" },
+  { key: "building",     label: "Building subtitles" },
+  { key: "uploading",    label: "Uploading files" },
+];
+
+function stageLabel(stage: string | null | undefined): string {
+  return STAGES.find((s) => s.key === stage)?.label ?? "Processing…";
+}
+
+function estimatedTime(durationSeconds: number | null, stage: string | null | undefined): string {
+  if (!durationSeconds) return "This page updates automatically.";
+  const totalMin = durationSeconds / 60;
+  // rough estimate: ~25s per minute of video for small model on 8 vCPU
+  const estimatedSec = Math.round(totalMin * 25);
+  const estimatedMin = Math.ceil(estimatedSec / 60);
+  if (stage === "transcribing") {
+    return `Transcription takes the longest — roughly ${estimatedMin} min total for a ${Math.round(totalMin)}-min video.`;
+  }
+  if (stage === "translating" || stage === "rewriting" || stage === "building" || stage === "uploading") {
+    return "Almost done — translation and upload are fast.";
+  }
+  return `Estimated ~${estimatedMin} min total. This page updates automatically.`;
+}
+
+function ProgressSteps({ stage }: { stage: string | null | undefined }) {
+  const currentIndex = STAGES.findIndex((s) => s.key === stage);
+
+  return (
+    <div className="space-y-1.5">
+      {STAGES.map((s, i) => {
+        const done = i < currentIndex;
+        const active = i === currentIndex;
+        return (
+          <div key={s.key} className="flex items-center gap-2.5">
+            <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+              done ? "bg-green-500" : active ? "bg-blue-500" : "bg-zinc-300 dark:bg-zinc-600"
+            }`} />
+            <span className={`text-xs ${
+              done ? "text-zinc-400 line-through" :
+              active ? "text-zinc-700 dark:text-zinc-200 font-medium" :
+              "text-zinc-400"
+            }`}>
+              {s.label}
+              {active && <span className="ml-1 text-blue-500">←</span>}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
