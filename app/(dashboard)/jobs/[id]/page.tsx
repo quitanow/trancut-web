@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
-import { getJob, cancelJob, type Job } from "@/lib/api";
+import { getJob, cancelJob, listJobs, type Job } from "@/lib/api";
 import { Download, CheckCircle, XCircle, Loader2, ArrowLeft, Ban } from "lucide-react";
 
 const POLL_INTERVAL_MS = 3000;
@@ -11,6 +11,7 @@ const POLL_INTERVAL_MS = 3000;
 export default function JobResultPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [job, setJob] = useState<Job | null>(null);
+  const [previousJob, setPreviousJob] = useState<Job | null>(null);
   const [error, setError] = useState("");
   const [cancelling, setCancelling] = useState(false);
 
@@ -34,7 +35,23 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
       }
     }
 
+    async function fetchPreviousJob() {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      try {
+        const jobs = await listJobs(session.access_token);
+        const currentIndex = jobs.findIndex((j) => j.id === id);
+        if (currentIndex !== -1 && currentIndex + 1 < jobs.length) {
+          setPreviousJob(jobs[currentIndex + 1]);
+        }
+      } catch {
+        // non-critical, ignore
+      }
+    }
+
     fetchJob();
+    fetchPreviousJob();
     return () => clearTimeout(timer);
   }, [id]);
 
@@ -68,6 +85,29 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
         <div className="flex items-center gap-2 text-zinc-400">
           <Loader2 size={16} className="animate-spin" />
           Loading…
+        </div>
+      )}
+
+      {previousJob && (
+        <div className="mb-4 px-1">
+          <p className="text-xs text-zinc-400">
+            Previous job:{" "}
+            <Link
+              href={`/jobs/${previousJob.id}`}
+              className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+            >
+              {previousJob.original_filename}
+            </Link>
+            {" — "}
+            <span className={
+              previousJob.status === "completed" ? "text-green-500" :
+              previousJob.status === "failed" ? "text-red-500" :
+              previousJob.status === "cancelled" ? "text-zinc-400" :
+              "text-blue-400"
+            }>
+              {previousJob.status}
+            </span>
+          </p>
         </div>
       )}
 
