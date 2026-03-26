@@ -232,6 +232,7 @@ const STAGES = [
   { key: "translating",  label: "Translating to Chinese" },
   { key: "rewriting",    label: "Applying style" },
   { key: "building",     label: "Building subtitles" },
+  { key: "dubbing",      label: "Generating dubbed audio" },
   { key: "uploading",    label: "Uploading files" },
 ];
 
