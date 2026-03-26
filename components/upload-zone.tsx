@@ -121,35 +121,16 @@ export default function UploadZone() {
     if (file) processFile(file, rewriteStyle);
   }
 
-  if (stage.type === "uploading" || stage.type === "checking" || stage.type === "queued") {
-    return (
-      <div className="border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl p-12 text-center bg-white dark:bg-zinc-900">
-        <Film size={32} className="mx-auto mb-4 text-zinc-400" />
-        <p className="font-medium text-zinc-700 dark:text-zinc-200 mb-1">
-          {stage.type === "checking" && `Checking ${stage.file.name}…`}
-          {stage.type === "uploading" && `Uploading… ${stage.progress}%`}
-          {stage.type === "queued" && "Job queued — redirecting…"}
-        </p>
-        {stage.type === "uploading" && (
-          <div className="mt-4 h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-200"
-              style={{ width: `${stage.progress}%` }}
-            />
-          </div>
-        )}
-      </div>
-    );
-  }
+  const busy = stage.type === "uploading" || stage.type === "checking" || stage.type === "queued";
 
   return (
     <div>
-      {/* Style selector */}
+      {/* Style selector — always visible */}
       <div className="mb-5">
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
           中文旁白風格
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div className={`grid grid-cols-2 sm:grid-cols-3 gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
           {REWRITE_STYLES.map((s) => (
             <button
               key={s.value}
@@ -168,7 +149,7 @@ export default function UploadZone() {
         </div>
 
         {(rewriteStyle === "vivid" || rewriteStyle === "concise") && (
-          <div className="mt-2.5 flex items-center gap-2">
+          <div className={`mt-2.5 flex items-center gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
             <span className="text-xs text-zinc-400">
               {rewriteStyle === "vivid" ? "擴充幅度" : "精簡幅度"}：
             </span>
@@ -192,30 +173,51 @@ export default function UploadZone() {
         <textarea
           value={rewriteDescription}
           onChange={(e) => setRewriteDescription(e.target.value)}
+          disabled={busy}
           placeholder="Describe what you'd like to rewrite (optional)…"
           rows={2}
-          className="mt-3 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors"
+          className="mt-3 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors disabled:opacity-60"
         />
       </div>
 
-      <div
-        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={onDrop}
-        onClick={() => inputRef.current?.click()}
-        className={`border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-colors ${
-          dragging
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20"
-            : "border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-white dark:bg-zinc-900"
-        }`}
-      >
-        <Upload size={32} className="mx-auto mb-4 text-zinc-400" />
-        <p className="font-medium text-zinc-700 dark:text-zinc-200 mb-1">
-          Drop your video here
-        </p>
-        <p className="text-sm text-zinc-400">or click to browse · MP4, MOV, M4V</p>
-        <p className="text-xs text-zinc-400 mt-3">Free plan: up to 2 min · Pro: up to 20 min</p>
-      </div>
+      {/* Drop zone or progress */}
+      {busy ? (
+        <div className="border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl p-12 text-center bg-white dark:bg-zinc-900">
+          <Film size={32} className="mx-auto mb-4 text-zinc-400" />
+          <p className="font-medium text-zinc-700 dark:text-zinc-200 mb-1">
+            {stage.type === "checking" && `Checking ${stage.file.name}…`}
+            {stage.type === "uploading" && `Uploading… ${stage.progress}%`}
+            {stage.type === "queued" && "Job queued — redirecting…"}
+          </p>
+          {stage.type === "uploading" && (
+            <div className="mt-4 h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all duration-200"
+                style={{ width: `${stage.progress}%` }}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={onDrop}
+          onClick={() => inputRef.current?.click()}
+          className={`border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-colors ${
+            dragging
+              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20"
+              : "border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-white dark:bg-zinc-900"
+          }`}
+        >
+          <Upload size={32} className="mx-auto mb-4 text-zinc-400" />
+          <p className="font-medium text-zinc-700 dark:text-zinc-200 mb-1">
+            Drop your video here
+          </p>
+          <p className="text-sm text-zinc-400">or click to browse · MP4, MOV, M4V</p>
+          <p className="text-xs text-zinc-400 mt-3">Free plan: up to 2 min · Pro: up to 20 min</p>
+        </div>
+      )}
 
       {stage.type === "error" && (
         <div className="mt-4 flex items-start gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
