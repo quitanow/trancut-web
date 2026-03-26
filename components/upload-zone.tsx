@@ -3,11 +3,12 @@
 import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { getPresignedUrl, uploadToR2, createJob } from "@/lib/api";
+import { getPresignedUrl, uploadToR2, createJob, getMe } from "@/lib/api";
 import { Upload, Film, AlertCircle } from "lucide-react";
 
 const ACCEPTED = ["video/mp4", "video/quicktime", "video/x-m4v"];
 const FREE_MAX_SECONDS = 120;
+const PRO_MAX_SECONDS = 1200;
 
 type Stage =
   | { type: "idle" }
@@ -16,13 +17,25 @@ type Stage =
   | { type: "queued"; jobId: string }
   | { type: "error"; message: string };
 
+const REWRITE_STYLES = [
+  { value: "none",         label: "直接翻譯",   desc: "保留原始翻譯，不加工" },
+  { value: "documentary",  label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" },
+  { value: "vivid",        label: "生動口語",   desc: "擴充約50%，通俗解說新科技" },
+  { value: "concise",      label: "精簡版",     desc: "保留核心，縮減約30%" },
+  { value: "social",       label: "社群短影音", desc: "活潑年輕，吸引新世代受眾" },
+] as const;
+
+type RewriteStyle = typeof REWRITE_STYLES[number]["value"];
+
 export default function UploadZone() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<Stage>({ type: "idle" });
   const [dragging, setDragging] = useState(false);
+  const [rewriteStyle, setRewriteStyle] = useState<RewriteStyle>("none");
+  const [rewriteDescription, setRewriteDescription] = useState("");
 
-  const processFile = useCallback(async (file: File) => {
+  const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle) => {
     if (!ACCEPTED.includes(file.type)) {
       setStage({ type: "error", message: "Only MP4, MOV, or M4V files are supported." });
       return;
@@ -35,14 +48,7 @@ export default function UploadZone() {
     try {
       duration = await getVideoDuration(file);
     } catch {
-      // Can't read metadata (unusual codec etc.) — let backend enforce limits
-    }
-    if (duration > 0 && duration > FREE_MAX_SECONDS) {
-      setStage({
-        type: "error",
-        message: `Video is ${Math.round(duration)}s — free plan supports up to ${FREE_MAX_SECONDS}s (2 min).`,
-      });
-      return;
+      // Can't read metadata — let backend enforce limits
     }
 
     // Get auth token
@@ -53,6 +59,23 @@ export default function UploadZone() {
       return;
     }
     const token = session.access_token;
+
+    // Fetch the user's actual plan limit, then enforce client-side
+    try {
+      const me = await getMe(token);
+      const limit = me.max_duration_seconds;
+      if (duration > 0 && duration > limit) {
+        const limitMin = limit / 60;
+        const planLabel = limit > FREE_MAX_SECONDS ? "Pro" : "free";
+        setStage({
+          type: "error",
+          message: `Video is ${Math.round(duration)}s — ${planLabel} plan supports up to ${limit}s (${limitMin} min).`,
+        });
+        return;
+      }
+    } catch {
+      // /me unavailable — skip client-side check, let backend enforce
+    }
 
     try {
       // 1. Get presigned upload URL
@@ -76,7 +99,7 @@ export default function UploadZone() {
       }
 
       // 3. Create job
-      const job = await createJob(token, r2_key, file.name, Math.round(duration));
+      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, rewriteDescription);
       setStage({ type: "queued", jobId: job.id });
 
       // Redirect to job result page
@@ -84,13 +107,13 @@ export default function UploadZone() {
     } catch (err) {
       setStage({ type: "error", message: (err as Error).message });
     }
-  }, [router]);
+  }, [router, rewriteStyle, rewriteDescription]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
-    if (file) processFile(file);
+    if (file) processFile(file, rewriteStyle);
   }
 
   if (stage.type === "uploading" || stage.type === "checking" || stage.type === "queued") {
@@ -116,6 +139,37 @@ export default function UploadZone() {
 
   return (
     <div>
+      {/* Style selector */}
+      <div className="mb-5">
+        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
+          中文旁白風格
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {REWRITE_STYLES.map((s) => (
+            <button
+              key={s.value}
+              type="button"
+              onClick={() => setRewriteStyle(s.value)}
+              className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                rewriteStyle === s.value
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                  : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-500"
+              }`}
+            >
+              <span className="font-medium block">{s.label}</span>
+              <span className="text-xs opacity-60 mt-0.5 block">{s.desc}</span>
+            </button>
+          ))}
+        </div>
+        <textarea
+          value={rewriteDescription}
+          onChange={(e) => setRewriteDescription(e.target.value)}
+          placeholder="Describe what you'd like to rewrite (optional)…"
+          rows={2}
+          className="mt-3 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors"
+        />
+      </div>
+
       <div
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
@@ -132,7 +186,7 @@ export default function UploadZone() {
           Drop your video here
         </p>
         <p className="text-sm text-zinc-400">or click to browse · MP4, MOV, M4V</p>
-        <p className="text-xs text-zinc-400 mt-3">Free plan: up to 2 min</p>
+        <p className="text-xs text-zinc-400 mt-3">Free plan: up to 2 min · Pro: up to 20 min</p>
       </div>
 
       {stage.type === "error" && (
@@ -149,7 +203,7 @@ export default function UploadZone() {
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) processFile(file);
+          if (file) processFile(file, rewriteStyle);
         }}
       />
     </div>

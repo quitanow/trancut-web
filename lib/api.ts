@@ -47,6 +47,7 @@ export interface Job {
   status: JobStatus;
   original_filename: string;
   duration_seconds: number | null;
+  rewrite_style: string;
   srt_en_url: string | null;
   srt_zh_url: string | null;
   srt_bilingual_url: string | null;
@@ -60,7 +61,9 @@ export async function createJob(
   token: string,
   r2Key: string,
   originalFilename: string,
-  durationSeconds: number
+  durationSeconds: number,
+  rewriteStyle = "none",
+  rewriteDescription = ""
 ): Promise<Job> {
   return authFetch("/jobs", token, {
     method: "POST",
@@ -68,6 +71,8 @@ export async function createJob(
       r2_key: r2Key,
       original_filename: originalFilename,
       duration_seconds: durationSeconds,
+      rewrite_style: rewriteStyle,
+      rewrite_description: rewriteDescription,
     }),
   });
 }
@@ -78,4 +83,16 @@ export async function getJob(token: string, jobId: string): Promise<Job> {
 
 export async function listJobs(token: string): Promise<Job[]> {
   return authFetch("/jobs", token);
+}
+
+// ── User ──────────────────────────────────────────────────────────────────────
+
+export interface Me {
+  tier: string;
+  max_duration_seconds: number;
+  jobs_this_month: number;
+}
+
+export async function getMe(token: string): Promise<Me> {
+  return authFetch("/me", token);
 }
