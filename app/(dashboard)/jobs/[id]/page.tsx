@@ -8,6 +8,14 @@ import { Download, CheckCircle, XCircle, Loader2, ArrowLeft, Ban } from "lucide-
 
 const POLL_INTERVAL_MS = 3000;
 
+const STYLE_LABELS: Record<string, string> = {
+  none:         "直接翻譯",
+  documentary:  "紀錄片旁白",
+  vivid:        "生動口語",
+  concise:      "精簡版",
+  social:       "社群短影音",
+};
+
 export default function JobResultPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [job, setJob] = useState<Job | null>(null);
@@ -126,6 +134,9 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                   {Math.floor(job.duration_seconds / 60)}m {job.duration_seconds % 60}s
                 </p>
               )}
+              <p className="text-xs text-zinc-400 mt-1">
+                風格：{STYLE_LABELS[job.rewrite_style] ?? job.rewrite_style}
+              </p>
             </div>
             <StatusBadge status={job.status} />
           </div>
