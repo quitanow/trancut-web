@@ -34,6 +34,7 @@ export default function UploadZone() {
   const [dragging, setDragging] = useState(false);
   const [rewriteStyle, setRewriteStyle] = useState<RewriteStyle>("none");
   const [rewriteDescription, setRewriteDescription] = useState("");
+  const [rewritePercentage, setRewritePercentage] = useState<"20" | "40" | "60">("40");
 
   const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle) => {
     if (!ACCEPTED.includes(file.type)) {
@@ -99,7 +100,11 @@ export default function UploadZone() {
       }
 
       // 3. Create job
-      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, rewriteDescription);
+      const needsPct = style === "vivid" || style === "concise";
+      const effectiveDesc = needsPct
+        ? `pct:${rewritePercentage}` + (rewriteDescription ? `\n${rewriteDescription}` : "")
+        : rewriteDescription;
+      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc);
       setStage({ type: "queued", jobId: job.id });
 
       // Redirect to job result page
@@ -107,7 +112,7 @@ export default function UploadZone() {
     } catch (err) {
       setStage({ type: "error", message: (err as Error).message });
     }
-  }, [router, rewriteStyle, rewriteDescription]);
+  }, [router, rewriteStyle, rewriteDescription, rewritePercentage]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault();
@@ -161,6 +166,29 @@ export default function UploadZone() {
             </button>
           ))}
         </div>
+
+        {(rewriteStyle === "vivid" || rewriteStyle === "concise") && (
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="text-xs text-zinc-400">
+              {rewriteStyle === "vivid" ? "擴充幅度" : "精簡幅度"}：
+            </span>
+            {(["20", "40", "60"] as const).map((pct) => (
+              <button
+                key={pct}
+                type="button"
+                onClick={() => setRewritePercentage(pct)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                  rewritePercentage === pct
+                    ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                    : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-500"
+                }`}
+              >
+                {pct}%
+              </button>
+            ))}
+          </div>
+        )}
+
         <textarea
           value={rewriteDescription}
           onChange={(e) => setRewriteDescription(e.target.value)}
