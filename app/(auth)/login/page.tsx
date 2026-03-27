@@ -30,7 +30,21 @@ export default function LoginPage() {
     <AuthLayout title="Welcome back" subtitle="Sign in to your TranCut account">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Field label="Email" type="email" value={email} onChange={setEmail} />
-        <Field label="Password" type="password" value={password} onChange={setPassword} />
+        <div>
+          <div className="flex justify-between items-center mb-1">
+            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Password</label>
+            <Link href="/forgot-password" className="text-xs text-zinc-400 hover:text-blue-600 transition-colors">
+              Forgot password?
+            </Link>
+          </div>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <button
           type="submit"
