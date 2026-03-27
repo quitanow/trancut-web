@@ -17,13 +17,18 @@ type Stage =
   | { type: "queued"; jobId: string }
   | { type: "error"; message: string };
 
-const REWRITE_STYLES = [
+const REWRITE_STYLES_ROW1 = [
   { value: "none",         label: "直接翻譯",   desc: "保留原始翻譯，不加工" },
   { value: "documentary",  label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" },
-  { value: "vivid",        label: "生動口語",   desc: "擴充約50%，通俗解說" },
-  { value: "concise",      label: "精簡版",     desc: "保留核心，縮減約30%" },
   { value: "social",       label: "社群短影音", desc: "活潑年輕，吸引新世代受眾" },
 ] as const;
+
+const REWRITE_STYLES_ROW2 = [
+  { value: "concise",      label: "精簡版",     desc: "保留核心，縮減約30%" },
+  { value: "vivid",        label: "生動口語",   desc: "擴充，通俗解說" },
+] as const;
+
+const REWRITE_STYLES = [...REWRITE_STYLES_ROW1, ...REWRITE_STYLES_ROW2];
 
 type RewriteStyle = typeof REWRITE_STYLES[number]["value"];
 
@@ -130,8 +135,9 @@ export default function UploadZone() {
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
           中文旁白風格
         </p>
-        <div className={`grid grid-cols-2 sm:grid-cols-3 gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
-          {REWRITE_STYLES.map((s) => (
+        {/* Row 1: 直接翻譯 · 紀錄片旁白 · 社群短影音 */}
+        <div className={`grid grid-cols-3 gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+          {REWRITE_STYLES_ROW1.map((s) => (
             <button
               key={s.value}
               type="button"
@@ -148,8 +154,30 @@ export default function UploadZone() {
           ))}
         </div>
 
+        {/* Row 2: 精簡版 · 生動口語 — centered under row 1 */}
+        <div className={`grid grid-cols-6 gap-2 mt-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+          <div className="col-span-1" />
+          {REWRITE_STYLES_ROW2.map((s) => (
+            <button
+              key={s.value}
+              type="button"
+              onClick={() => setRewriteStyle(s.value)}
+              className={`col-span-2 text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                rewriteStyle === s.value
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                  : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-500"
+              }`}
+            >
+              <span className="font-medium block">{s.label}</span>
+              <span className="text-xs opacity-60 mt-0.5 block">{s.desc}</span>
+            </button>
+          ))}
+          <div className="col-span-1" />
+        </div>
+
+        {/* Percentage selector — centered, shown for 精簡版 / 生動口語 */}
         {(rewriteStyle === "vivid" || rewriteStyle === "concise") && (
-          <div className={`mt-2.5 flex items-center gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+          <div className={`mt-2.5 flex items-center justify-center gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
             <span className="text-xs text-zinc-400">
               {rewriteStyle === "vivid" ? "擴充幅度" : "精簡幅度"}：
             </span>
