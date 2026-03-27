@@ -76,15 +76,35 @@ export default function LandingPage() {
 
       {/* Pricing */}
       <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-16 text-center">
-        <div className="max-w-md mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
             {t.pricing.title}
           </h2>
           <p className="text-zinc-500 dark:text-zinc-400 mb-8">{t.pricing.subtitle}</p>
-          <div className="grid grid-cols-2 gap-4 text-left">
-            <PricingCard {...t.pricing.free} />
-            <PricingCard {...t.pricing.pro} highlight />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+            <PricingCard
+              tier="Free"
+              price="$0"
+              features={["2 min / video", "5 videos / month", "All output formats"]}
+              cta={{ label: "Get started", href: "/signup" }}
+            />
+            <PricingCard
+              tier="Basic"
+              price="$9.99 / mo"
+              features={["10 min / video", "30 videos / month", "All output formats", "Add-on credits available"]}
+              cta={{ label: "Subscribe", href: "/signup?plan=basic" }}
+            />
+            <PricingCard
+              tier="Pro"
+              price="$19.99 / mo"
+              features={["20 min / video", "Unlimited videos", "All output formats", "Priority processing"]}
+              cta={{ label: "Subscribe", href: "/signup?plan=pro" }}
+              highlight
+            />
           </div>
+          <p className="text-xs text-zinc-400 mt-6">
+            Need more? Buy 10 extra videos for $4.99 anytime — no plan change needed.
+          </p>
         </div>
       </section>
 
@@ -119,16 +139,18 @@ function PricingCard({
   tier,
   price,
   features,
+  cta,
   highlight = false,
 }: {
   tier: string;
   price: string;
-  features: readonly string[];
+  features: string[];
+  cta: { label: string; href: string };
   highlight?: boolean;
 }) {
   return (
     <div
-      className={`rounded-xl p-5 border ${
+      className={`rounded-xl p-5 border flex flex-col ${
         highlight
           ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30"
           : "border-zinc-200 dark:border-zinc-700"
@@ -136,13 +158,23 @@ function PricingCard({
     >
       <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1">{tier}</div>
       <div className="font-bold text-zinc-900 dark:text-white mb-4">{price}</div>
-      <ul className="space-y-2">
+      <ul className="space-y-2 flex-1 mb-5">
         {features.map((f) => (
           <li key={f} className="text-xs text-zinc-600 dark:text-zinc-400 flex gap-2">
             <span className="text-green-500">✓</span> {f}
           </li>
         ))}
       </ul>
+      <Link
+        href={cta.href}
+        className={`text-center text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
+          highlight
+            ? "bg-blue-600 text-white hover:bg-blue-700"
+            : "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 hover:opacity-90"
+        }`}
+      >
+        {cta.label}
+      </Link>
     </div>
   );
 }

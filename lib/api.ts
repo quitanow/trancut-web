@@ -103,8 +103,28 @@ export interface Me {
   tier: string;
   max_duration_seconds: number;
   jobs_this_month: number;
+  monthly_job_limit: number | null;
+  credits: number;
+  has_billing: boolean;
 }
 
 export async function getMe(token: string): Promise<Me> {
   return authFetch("/me", token);
+}
+
+// ── Billing ───────────────────────────────────────────────────────────────────
+
+export async function createCheckoutSession(token: string, plan: "basic" | "pro"): Promise<{ url: string }> {
+  return authFetch("/billing/checkout", token, {
+    method: "POST",
+    body: JSON.stringify({ plan }),
+  });
+}
+
+export async function createPortalSession(token: string): Promise<{ url: string }> {
+  return authFetch("/billing/portal", token, { method: "POST" });
+}
+
+export async function buyCredits(token: string): Promise<{ url: string }> {
+  return authFetch("/billing/credits", token, { method: "POST" });
 }
