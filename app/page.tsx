@@ -29,7 +29,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
         <div className="max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full mb-6">
             <Zap size={12} />
@@ -66,7 +66,7 @@ export default function LandingPage() {
       </main>
 
       {/* Features */}
-      <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-20">
+      <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-10">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
           <Feature icon={<Subtitles size={22} />} {...t.features.items[0]} />
           <Feature icon={<Globe size={22} />} {...t.features.items[1]} />
@@ -75,7 +75,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-16 text-center">
+      <section id="pricing" className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-10 text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
             {t.pricing.title}
