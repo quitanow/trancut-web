@@ -10,6 +10,33 @@ const ACCEPTED = ["video/mp4", "video/quicktime", "video/x-m4v"];
 const FREE_MAX_SECONDS = 120;
 const PRO_MAX_SECONDS = 1200;
 
+const SOURCE_LANGUAGES = [
+  { value: "auto", label: "自動偵測" },
+  { value: "en",   label: "English" },
+  { value: "zh",   label: "中文" },
+  { value: "ja",   label: "日本語" },
+  { value: "ko",   label: "한국어" },
+  { value: "es",   label: "Español" },
+  { value: "fr",   label: "Français" },
+  { value: "de",   label: "Deutsch" },
+  { value: "pt",   label: "Português" },
+] as const;
+
+const TARGET_LANGUAGES = [
+  { value: "zh-TW", label: "繁體中文" },
+  { value: "zh-CN", label: "简体中文" },
+  { value: "en",    label: "English" },
+  { value: "ja",    label: "日本語" },
+  { value: "ko",    label: "한국어" },
+  { value: "es",    label: "Español" },
+  { value: "fr",    label: "Français" },
+  { value: "de",    label: "Deutsch" },
+  { value: "pt",    label: "Português" },
+] as const;
+
+type SourceLanguage = typeof SOURCE_LANGUAGES[number]["value"];
+type TargetLanguage = typeof TARGET_LANGUAGES[number]["value"];
+
 type Stage =
   | { type: "idle" }
   | { type: "checking"; file: File }
@@ -37,6 +64,8 @@ export default function UploadZone() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<Stage>({ type: "idle" });
   const [dragging, setDragging] = useState(false);
+  const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("auto");
+  const [targetLanguage, setTargetLanguage] = useState<TargetLanguage>("zh-TW");
   const [rewriteStyle, setRewriteStyle] = useState<RewriteStyle>("none");
   const [rewriteDescription, setRewriteDescription] = useState("");
   const [rewritePercentage, setRewritePercentage] = useState<"20" | "40" | "60">("40");
@@ -109,7 +138,7 @@ export default function UploadZone() {
       const effectiveDesc = needsPct
         ? `pct:${rewritePercentage}` + (rewriteDescription ? `\n${rewriteDescription}` : "")
         : rewriteDescription;
-      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc);
+      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc, sourceLanguage, targetLanguage);
       setStage({ type: "queued", jobId: job.id });
 
       // Redirect to job result page
@@ -117,7 +146,7 @@ export default function UploadZone() {
     } catch (err) {
       setStage({ type: "error", message: (err as Error).message });
     }
-  }, [router, rewriteStyle, rewriteDescription, rewritePercentage]);
+  }, [router, sourceLanguage, targetLanguage, rewriteStyle, rewriteDescription, rewritePercentage]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault();
@@ -130,10 +159,43 @@ export default function UploadZone() {
 
   return (
     <div>
+      {/* Language selector */}
+      <div className={`mb-5 flex items-center gap-3 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+        <div className="flex-1">
+          <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide block mb-1.5">
+            影片語言
+          </label>
+          <select
+            value={sourceLanguage}
+            onChange={(e) => setSourceLanguage(e.target.value as SourceLanguage)}
+            className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors"
+          >
+            {SOURCE_LANGUAGES.map((l) => (
+              <option key={l.value} value={l.value}>{l.label}</option>
+            ))}
+          </select>
+        </div>
+        <div className="text-zinc-400 mt-5">→</div>
+        <div className="flex-1">
+          <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide block mb-1.5">
+            翻譯語言
+          </label>
+          <select
+            value={targetLanguage}
+            onChange={(e) => setTargetLanguage(e.target.value as TargetLanguage)}
+            className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors"
+          >
+            {TARGET_LANGUAGES.map((l) => (
+              <option key={l.value} value={l.value}>{l.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Style selector — always visible */}
       <div className="mb-5">
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
-          中文旁白風格
+          旁白風格
         </p>
         {/* Row 1: 直接翻譯 · 紀錄片旁白 · 社群短影音 */}
         <div className={`grid grid-cols-3 gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>

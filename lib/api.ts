@@ -47,6 +47,8 @@ export interface Job {
   status: JobStatus;
   original_filename: string;
   duration_seconds: number | null;
+  source_language: string;
+  target_language: string;
   rewrite_style: string;
   rewrite_description: string | null;
   srt_en_url: string | null;
@@ -65,7 +67,9 @@ export async function createJob(
   originalFilename: string,
   durationSeconds: number,
   rewriteStyle = "none",
-  rewriteDescription = ""
+  rewriteDescription = "",
+  sourceLanguage = "auto",
+  targetLanguage = "zh-TW"
 ): Promise<Job> {
   return authFetch("/jobs", token, {
     method: "POST",
@@ -73,6 +77,8 @@ export async function createJob(
       r2_key: r2Key,
       original_filename: originalFilename,
       duration_seconds: durationSeconds,
+      source_language: sourceLanguage,
+      target_language: targetLanguage,
       rewrite_style: rewriteStyle,
       rewrite_description: rewriteDescription,
     }),

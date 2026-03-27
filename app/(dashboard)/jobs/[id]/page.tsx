@@ -16,6 +16,19 @@ const STYLE_LABELS: Record<string, string> = {
   social:       "社群短影音",
 };
 
+const LANGUAGE_LABELS: Record<string, string> = {
+  auto:  "Auto",
+  "zh-TW": "繁體中文",
+  "zh-CN": "简体中文",
+  en:    "English",
+  ja:    "日本語",
+  ko:    "한국어",
+  es:    "Español",
+  fr:    "Français",
+  de:    "Deutsch",
+  pt:    "Português",
+};
+
 export default function JobResultPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [job, setJob] = useState<Job | null>(null);
@@ -179,35 +192,39 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
             </div>
           )}
 
-          {job.status === "completed" && (
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">
-                Your subtitle files are ready:
-              </p>
-              {job.video_dubbed_url && (
+          {job.status === "completed" && (() => {
+            const srcLabel = LANGUAGE_LABELS[job.source_language] ?? job.source_language;
+            const tgtLabel = LANGUAGE_LABELS[job.target_language] ?? job.target_language;
+            return (
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">
+                  Your subtitle files are ready:
+                </p>
+                {job.video_dubbed_url && (
+                  <DownloadButton
+                    label={`Dubbed Video (${tgtLabel}配音)`}
+                    description={`MP4 with ${tgtLabel} voiceover`}
+                    url={job.video_dubbed_url}
+                  />
+                )}
                 <DownloadButton
-                  label="Dubbed Video (中文配音)"
-                  description="MP4 with Traditional Chinese voiceover"
-                  url={job.video_dubbed_url}
+                  label={`Bilingual SRT (${srcLabel} + ${tgtLabel})`}
+                  description="Best for publishing — both languages stacked"
+                  url={job.srt_bilingual_url}
                 />
-              )}
-              <DownloadButton
-                label="Bilingual SRT (EN + 中文)"
-                description="Best for publishing — both languages stacked"
-                url={job.srt_bilingual_url}
-              />
-              <DownloadButton
-                label="Chinese SRT only (中文字幕)"
-                description="Traditional Chinese translation"
-                url={job.srt_zh_url}
-              />
-              <DownloadButton
-                label="English SRT only"
-                description="Original transcription"
-                url={job.srt_en_url}
-              />
-            </div>
-          )}
+                <DownloadButton
+                  label={`${tgtLabel} SRT only`}
+                  description={`${tgtLabel} translation`}
+                  url={job.srt_zh_url}
+                />
+                <DownloadButton
+                  label={`${srcLabel} SRT only`}
+                  description="Original transcription"
+                  url={job.srt_en_url}
+                />
+              </div>
+            );
+          })()}
 
           {job.status === "failed" && (
             <div className="flex items-start gap-3 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 rounded-xl px-5 py-4">
@@ -237,6 +254,8 @@ const STAGES = [
 ];
 
 function settingSummary(job: Job): string {
+  const srcLabel = LANGUAGE_LABELS[job.source_language] ?? job.source_language;
+  const tgtLabel = LANGUAGE_LABELS[job.target_language] ?? job.target_language;
   const styleLabel = STYLE_LABELS[job.rewrite_style] ?? job.rewrite_style;
   const desc = job.rewrite_description ?? "";
   let pct: string | null = null;
@@ -246,7 +265,7 @@ function settingSummary(job: Job): string {
     pct = first.slice(4).trim();
     extra = rest.join("\n").trim();
   }
-  const parts = [`風格：${styleLabel}`];
+  const parts = [`${srcLabel} → ${tgtLabel}`, `風格：${styleLabel}`];
   if (pct) parts.push(`${job.rewrite_style === "vivid" ? "擴充" : "精簡"} ${pct}%`);
   if (extra) parts.push(extra);
   return parts.join(" · ");
