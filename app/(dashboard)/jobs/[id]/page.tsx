@@ -276,13 +276,13 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
 function getStages(targetLanguage: string) {
   const tgtLabel = LANGUAGE_LABELS[targetLanguage] ?? targetLanguage;
   return [
-    { key: "downloading",  label: "Downloading video" },
+    { key: "downloading",  label: "Uploading video" },
     { key: "transcribing", label: "Transcribing audio" },
     { key: "translating",  label: `Translating to ${tgtLabel}` },
     { key: "rewriting",    label: "Applying style" },
     { key: "building",     label: "Building subtitles" },
     { key: "dubbing",      label: "Generating dubbed audio" },
-    { key: "uploading",    label: "Uploading files" },
+    { key: "uploading",    label: "Generating dubbed video" },
   ];
 }
 
