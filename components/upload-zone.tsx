@@ -142,6 +142,16 @@ type Stage =
   | { type: "queued"; jobId: string }
   | { type: "error"; message: string };
 
+const TTS_VOICES = [
+  { value: "",        label: "無配音",   desc: "僅輸出字幕檔" },
+  { value: "shimmer", label: "溫和女聲", desc: "親切柔和，適合教程" },
+  { value: "onyx",    label: "穩重男聲", desc: "深沉有力，適合解說" },
+  { value: "alloy",   label: "自然中性", desc: "均衡自然，通用場景" },
+  { value: "coral",   label: "清晰講解", desc: "清晰明快，適合課程" },
+  { value: "fable",   label: "故事旁白", desc: "溫暖敘述，適合紀錄片" },
+  { value: "nova",    label: "高級質感", desc: "精緻細膩，品牌影片" },
+];
+
 const REWRITE_STYLES_ROW1 = [
   { value: "none",         label: "直接翻譯",   desc: "保留原始翻譯，不加工" },
   { value: "documentary",  label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" },
@@ -167,8 +177,9 @@ export default function UploadZone() {
   const [rewriteStyle, setRewriteStyle] = useState<RewriteStyle>("none");
   const [rewriteDescription, setRewriteDescription] = useState("");
   const [rewritePercentage, setRewritePercentage] = useState<"20" | "40" | "60">("40");
+  const [ttsVoice, setTtsVoice] = useState("");
 
-  const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle) => {
+  const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle, voice: string = ttsVoice) => {
     if (!ACCEPTED.includes(file.type)) {
       setStage({ type: "error", message: "Only MP4, MOV, or M4V files are supported." });
       return;
@@ -236,7 +247,7 @@ export default function UploadZone() {
       const effectiveDesc = needsPct
         ? `pct:${rewritePercentage}` + (rewriteDescription ? `\n${rewriteDescription}` : "")
         : rewriteDescription;
-      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc, sourceLanguage, targetLanguage);
+      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc, sourceLanguage, targetLanguage, voice || null);
       setStage({ type: "queued", jobId: job.id });
 
       // Redirect to job result page
@@ -244,13 +255,13 @@ export default function UploadZone() {
     } catch (err) {
       setStage({ type: "error", message: (err as Error).message });
     }
-  }, [router, sourceLanguage, targetLanguage, rewriteStyle, rewriteDescription, rewritePercentage]);
+  }, [router, sourceLanguage, targetLanguage, rewriteStyle, rewriteDescription, rewritePercentage, ttsVoice]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
-    if (file) processFile(file, rewriteStyle);
+    if (file) processFile(file, rewriteStyle, ttsVoice);
   }
 
   const busy = stage.type === "uploading" || stage.type === "checking" || stage.type === "queued";
@@ -368,6 +379,30 @@ export default function UploadZone() {
         />
       </div>
 
+      {/* Voice selector */}
+      <div className={`mb-5 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
+          配音聲音
+        </p>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-7">
+          {TTS_VOICES.map((v) => (
+            <button
+              key={v.value}
+              type="button"
+              onClick={() => setTtsVoice(v.value)}
+              className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                ttsVoice === v.value
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                  : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-500"
+              }`}
+            >
+              <span className="font-medium block">{v.label}</span>
+              <span className="text-xs opacity-60 mt-0.5 block">{v.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Drop zone or progress */}
       {busy ? (
         <div className="border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl p-12 text-center bg-white dark:bg-zinc-900">
@@ -421,7 +456,7 @@ export default function UploadZone() {
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) processFile(file, rewriteStyle);
+          if (file) processFile(file, rewriteStyle, ttsVoice);
         }}
       />
     </div>

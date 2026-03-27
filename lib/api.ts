@@ -69,7 +69,8 @@ export async function createJob(
   rewriteStyle = "none",
   rewriteDescription = "",
   sourceLanguage = "auto",
-  targetLanguage = "zh-TW"
+  targetLanguage = "zh-TW",
+  ttsVoice: string | null = null
 ): Promise<Job> {
   return authFetch("/jobs", token, {
     method: "POST",
@@ -81,6 +82,7 @@ export async function createJob(
       target_language: targetLanguage,
       rewrite_style: rewriteStyle,
       rewrite_description: rewriteDescription,
+      tts_voice: ttsVoice,
     }),
   });
 }
