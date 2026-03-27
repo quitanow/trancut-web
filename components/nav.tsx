@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import { getMe, createPortalSession, type Me } from "@/lib/api";
 import { useLocale } from "@/components/locale-provider";
-import { Upload, Clock, LogOut, CreditCard } from "lucide-react";
+import { Upload, Clock, LogOut, CreditCard, Sparkles } from "lucide-react";
 
 const TIER_LABELS: Record<string, string> = { free: "Free", basic: "Basic", pro: "Pro" };
 const TIER_COLORS: Record<string, string> = {
@@ -33,6 +33,7 @@ export default function Nav() {
   const links = [
     { href: "/upload", label: t.nav.upload, icon: Upload },
     { href: "/jobs", label: t.nav.history, icon: Clock },
+    { href: "/pricing", label: "Pricing", icon: Sparkles },
   ];
 
   async function handleManageBilling() {
