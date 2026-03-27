@@ -143,10 +143,9 @@ type Stage =
   | { type: "error"; message: string };
 
 const SUBTITLE_MODES = [
-  { value: "",          label: "無字幕",   desc: "僅輸出 SRT 檔" },
-  { value: "source",    label: "原文字幕", desc: "原始語言烙印" },
-  { value: "target",    label: "譯文字幕", desc: "翻譯語言烙印" },
-  { value: "bilingual", label: "雙語字幕", desc: "原文＋譯文" },
+  { value: "",       label: "無字幕",   desc: "僅輸出 SRT 檔" },
+  { value: "source", label: "原文字幕", desc: "原始語言烙印" },
+  { value: "target", label: "譯文字幕", desc: "翻譯語言烙印" },
 ];
 
 const TTS_VOICES = [
