@@ -29,7 +29,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-6 text-center">
+      <main className="px-6 py-8 text-center">
         <div className="max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full mb-3">
             <Zap size={12} />

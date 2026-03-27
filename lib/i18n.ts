@@ -16,11 +16,11 @@ export const translations = {
       signOut: "Sign out",
     },
     hero: {
-      badge: "English → Chinese subtitles in minutes",
+      badge: "57 languages · AI dubbing · Subtitle burning",
       title1: "Translate your videos.",
       title2: "Effortlessly.",
       subtitle:
-        "Upload a video, get bilingual subtitles. TranCut transcribes your English video and translates it to Traditional Chinese — ready to download in seconds.",
+        "Upload a video, choose your languages, and get subtitles, dubbing, and burned-in captions — in minutes. Supports 57 languages.",
       ctaPrimary: "Start for free",
       ctaSecondary: "Sign in",
       freeNote: "Free: up to 2 min · No credit card required",
@@ -29,19 +29,19 @@ export const translations = {
       title: "",
       items: [
         {
-          title: "Accurate transcription",
+          title: "57-language transcription",
           description:
-            "Powered by Whisper AI — handles accents, fast speech, and background noise.",
+            "Powered by Whisper AI — auto-detects language, handles accents, fast speech, and background noise.",
         },
         {
-          title: "Natural translation",
+          title: "AI dubbing & subtitles",
           description:
-            "Translated by GPT-4o for fluent, readable Traditional Chinese subtitles — not robotic word-for-word.",
+            "Choose from 6 voices for dubbing, burn subtitles (source, target, or bilingual) directly into your video.",
         },
         {
-          title: "Download SRT files",
+          title: "Flexible output formats",
           description:
-            "Get both English-only and bilingual SRT files, ready to use in any video editor.",
+            "Download SRT files, burned-in subtitle video, or AI-dubbed MP4 — ready for any platform.",
         },
       ],
     },
@@ -126,11 +126,11 @@ export const translations = {
       signOut: "登出",
     },
     hero: {
-      badge: "英文 → 中文字幕，幾分鐘搞定",
+      badge: "57 種語言 · AI 配音 · 字幕烙印",
       title1: "翻譯你的影片，",
       title2: "輕鬆無比。",
       subtitle:
-        "上傳影片，立即取得雙語字幕。TranCut 將英文影片轉錄並翻譯成繁體中文，幾秒鐘內即可下載。",
+        "上傳影片，選擇語言，幾分鐘內取得字幕、AI 配音與烙印字幕影片。支援 57 種語言互譯。",
       ctaPrimary: "免費開始",
       ctaSecondary: "登入",
       freeNote: "免費版：最長 2 分鐘 · 無需信用卡",
@@ -139,16 +139,16 @@ export const translations = {
       title: "",
       items: [
         {
-          title: "精準轉錄",
-          description: "採用 Whisper AI，能處理各種口音、語速與背景噪音。",
+          title: "57 種語言轉錄",
+          description: "採用 Whisper AI 自動偵測語言，能處理各種口音、語速與背景噪音。",
         },
         {
-          title: "自然流暢的翻譯",
-          description: "以 GPT-4o 翻譯，生成道地繁體中文字幕，而非生硬的逐字翻譯。",
+          title: "AI 配音與字幕烙印",
+          description: "6 種 AI 聲音配音，支援原文／譯文／雙語字幕直接烙印進影片。",
         },
         {
-          title: "下載 SRT 字幕檔",
-          description: "同時提供純英文及雙語 SRT 檔案，可直接用於任何影片剪輯軟體。",
+          title: "彈性輸出格式",
+          description: "下載 SRT 字幕檔、烙印字幕影片或 AI 配音 MP4，適用各大平台。",
         },
       ],
     },
@@ -233,11 +233,11 @@ export const translations = {
       signOut: "退出登录",
     },
     hero: {
-      badge: "英文 → 中文字幕，几分钟搞定",
+      badge: "57 种语言 · AI 配音 · 字幕烙印",
       title1: "翻译你的视频，",
       title2: "轻松无比。",
       subtitle:
-        "上传视频，立即获得双语字幕。TranCut 将英文视频转录并翻译成中文，几秒钟内即可下载。",
+        "上传视频，选择语言，几分钟内获得字幕、AI 配音与烙印字幕视频。支持 57 种语言互译。",
       ctaPrimary: "免费开始",
       ctaSecondary: "登录",
       freeNote: "免费版：最长 2 分钟 · 无需信用卡",
@@ -246,16 +246,16 @@ export const translations = {
       title: "",
       items: [
         {
-          title: "精准转录",
-          description: "采用 Whisper AI，能处理各种口音、语速与背景噪音。",
+          title: "57 种语言转录",
+          description: "采用 Whisper AI 自动检测语言，能处理各种口音、语速与背景噪音。",
         },
         {
-          title: "自然流畅的翻译",
-          description: "以 GPT-4o 翻译，生成地道中文字幕，而非生硬的逐字翻译。",
+          title: "AI 配音与字幕烙印",
+          description: "6 种 AI 声音配音，支持原文／译文／双语字幕直接烙印进视频。",
         },
         {
-          title: "下载 SRT 字幕文件",
-          description: "同时提供纯英文及双语 SRT 文件，可直接用于任何视频剪辑软件。",
+          title: "灵活输出格式",
+          description: "下载 SRT 字幕文件、烙印字幕视频或 AI 配音 MP4，适用各大平台。",
         },
       ],
     },
