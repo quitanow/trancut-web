@@ -29,20 +29,20 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-6 text-center">
         <div className="max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 text-xs font-medium bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full mb-3">
             <Zap size={12} />
             {t.hero.badge}
           </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-zinc-900 dark:text-white mb-6 leading-tight">
+          <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3 leading-tight">
             {t.hero.title1}
             <br />
             <span className="text-blue-600">{t.hero.title2}</span>
           </h1>
 
-          <p className="text-lg text-zinc-500 dark:text-zinc-400 mb-10 leading-relaxed">
+          <p className="text-base text-zinc-500 dark:text-zinc-400 mb-6 leading-relaxed">
             {t.hero.subtitle}
           </p>
 
