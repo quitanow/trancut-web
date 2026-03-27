@@ -9,22 +9,16 @@ export default function LanguageSwitcher() {
   const { locale, setLocale } = useLocale();
 
   return (
-    <div className="flex items-center text-xs border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 px-6 py-1.5 justify-center gap-1">
-      {locales.map((l, i) => (
-        <span key={l} className="flex items-center gap-1">
-          {i > 0 && <span className="text-zinc-300 dark:text-zinc-600 select-none">｜</span>}
-          <button
-            onClick={() => setLocale(l)}
-            className={`px-1 py-0.5 rounded transition-colors ${
-              locale === l
-                ? "text-zinc-900 dark:text-white font-medium"
-                : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
-            }`}
-          >
-            {localeLabels[l]}
-          </button>
-        </span>
-      ))}
+    <div className="flex items-center justify-center border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 px-6 py-1.5">
+      <select
+        value={locale}
+        onChange={(e) => setLocale(e.target.value as Locale)}
+        className="text-xs text-zinc-500 dark:text-zinc-400 bg-transparent border-none outline-none cursor-pointer hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+      >
+        {locales.map((l) => (
+          <option key={l} value={l}>{localeLabels[l]}</option>
+        ))}
+      </select>
     </div>
   );
 }
