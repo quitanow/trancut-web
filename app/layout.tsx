@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TranCut — Video Subtitle Translator",
-  description: "Transcribe and translate your videos from English to Chinese in minutes.",
+  title: "TranCut — Video Translator",
+  description: "Transcribe, translate, dub, and subtitle your videos in 57 languages — in minutes.",
 };
 
 export default function RootLayout({
