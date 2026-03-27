@@ -223,6 +223,13 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                 <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">
                   Your subtitle files are ready:
                 </p>
+                {job.video_subtitled_url && (
+                  <DownloadButton
+                    label="字幕視頻"
+                    description="已烙印字幕的 MP4"
+                    url={job.video_subtitled_url}
+                  />
+                )}
                 {job.video_dubbed_url && (
                   <DownloadButton
                     label={`Dubbed Video (${tgtLabel}配音)`}

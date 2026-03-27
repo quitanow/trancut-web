@@ -55,6 +55,7 @@ export interface Job {
   srt_zh_url: string | null;
   srt_bilingual_url: string | null;
   video_dubbed_url: string | null;
+  video_subtitled_url: string | null;
   progress_stage: string | null;
   error_message: string | null;
   created_at: string;
@@ -70,7 +71,8 @@ export async function createJob(
   rewriteDescription = "",
   sourceLanguage = "auto",
   targetLanguage = "zh-TW",
-  ttsVoice: string | null = null
+  ttsVoice: string | null = null,
+  subtitleMode: string | null = null
 ): Promise<Job> {
   return authFetch("/jobs", token, {
     method: "POST",
@@ -83,6 +85,7 @@ export async function createJob(
       rewrite_style: rewriteStyle,
       rewrite_description: rewriteDescription,
       tts_voice: ttsVoice,
+      subtitle_mode: subtitleMode,
     }),
   });
 }

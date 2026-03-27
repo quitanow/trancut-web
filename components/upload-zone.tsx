@@ -142,6 +142,13 @@ type Stage =
   | { type: "queued"; jobId: string }
   | { type: "error"; message: string };
 
+const SUBTITLE_MODES = [
+  { value: "",          label: "無字幕",   desc: "僅輸出 SRT 檔" },
+  { value: "source",    label: "原文字幕", desc: "原始語言烙印" },
+  { value: "target",    label: "譯文字幕", desc: "翻譯語言烙印" },
+  { value: "bilingual", label: "雙語字幕", desc: "原文＋譯文" },
+];
+
 const TTS_VOICES = [
   { value: "",        label: "無配音",   desc: "僅輸出字幕檔" },
   { value: "shimmer", label: "溫和女聲", desc: "親切柔和，適合教程" },
@@ -178,8 +185,9 @@ export default function UploadZone() {
   const [rewriteDescription, setRewriteDescription] = useState("");
   const [rewritePercentage, setRewritePercentage] = useState<"20" | "40" | "60">("40");
   const [ttsVoice, setTtsVoice] = useState("");
+  const [subtitleMode, setSubtitleMode] = useState("");
 
-  const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle, voice: string = ttsVoice) => {
+  const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle, voice: string = ttsVoice, subtitle: string = subtitleMode) => {
     if (!ACCEPTED.includes(file.type)) {
       setStage({ type: "error", message: "Only MP4, MOV, or M4V files are supported." });
       return;
@@ -247,7 +255,7 @@ export default function UploadZone() {
       const effectiveDesc = needsPct
         ? `pct:${rewritePercentage}` + (rewriteDescription ? `\n${rewriteDescription}` : "")
         : rewriteDescription;
-      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc, sourceLanguage, targetLanguage, voice || null);
+      const job = await createJob(token, r2_key, file.name, Math.round(duration), style, effectiveDesc, sourceLanguage, targetLanguage, voice || null, subtitle || null);
       setStage({ type: "queued", jobId: job.id });
 
       // Redirect to job result page
@@ -255,13 +263,13 @@ export default function UploadZone() {
     } catch (err) {
       setStage({ type: "error", message: (err as Error).message });
     }
-  }, [router, sourceLanguage, targetLanguage, rewriteStyle, rewriteDescription, rewritePercentage, ttsVoice]);
+  }, [router, sourceLanguage, targetLanguage, rewriteStyle, rewriteDescription, rewritePercentage, ttsVoice, subtitleMode]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
-    if (file) processFile(file, rewriteStyle, ttsVoice);
+    if (file) processFile(file, rewriteStyle, ttsVoice, subtitleMode);
   }
 
   const busy = stage.type === "uploading" || stage.type === "checking" || stage.type === "queued";
@@ -379,6 +387,30 @@ export default function UploadZone() {
         />
       </div>
 
+      {/* Subtitle mode selector */}
+      <div className={`mb-5 ${busy ? "pointer-events-none opacity-60" : ""}`}>
+        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
+          字幕輸出
+        </p>
+        <div className="grid grid-cols-4 gap-2">
+          {SUBTITLE_MODES.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              onClick={() => setSubtitleMode(m.value)}
+              className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                subtitleMode === m.value
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                  : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-500"
+              }`}
+            >
+              <span className="font-medium block">{m.label}</span>
+              <span className="text-xs opacity-60 mt-0.5 block">{m.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Voice selector */}
       <div className={`mb-5 ${busy ? "pointer-events-none opacity-60" : ""}`}>
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
@@ -456,7 +488,7 @@ export default function UploadZone() {
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) processFile(file, rewriteStyle, ttsVoice);
+          if (file) processFile(file, rewriteStyle, ttsVoice, subtitleMode);
         }}
       />
     </div>
