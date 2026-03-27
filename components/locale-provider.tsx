@@ -6,6 +6,15 @@ import { type Locale, type Translations, translations } from "@/lib/i18n";
 const STORAGE_KEY = "trancut-locale";
 const DEFAULT_LOCALE: Locale = "en";
 
+function detectLocale(): Locale {
+  const saved = localStorage.getItem(STORAGE_KEY) as Locale | null;
+  if (saved && saved in translations) return saved;
+  const lang = navigator.language; // e.g. "zh-TW", "zh-HK", "zh-CN", "fr-FR"
+  if (lang === "zh-TW" || lang === "zh-HK") return "zh-TW";
+  if (lang.startsWith("zh")) return "zh-CN";
+  return "en";
+}
+
 interface LocaleContextValue {
   locale: Locale;
   setLocale: (l: Locale) => void;
@@ -23,8 +32,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as Locale | null;
-    if (saved && saved in translations) setLocaleState(saved);
+    setLocaleState(detectLocale());
   }, []);
 
   function setLocale(l: Locale) {
