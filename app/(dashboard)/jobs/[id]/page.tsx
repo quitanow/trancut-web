@@ -182,6 +182,26 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                   ? "Your job will start shortly."
                   : estimatedTime(job.duration_seconds, job.progress_stage)}
               </p>
+
+              {(job.srt_en_url || job.srt_zh_url) && (
+                <div className="border-t border-zinc-200 dark:border-zinc-700 pt-3 space-y-2">
+                  <p className="text-xs text-zinc-400 mb-1">Ready to download:</p>
+                  {job.srt_en_url && (
+                    <DownloadButton
+                      label={`${LANGUAGE_LABELS[job.source_language] ?? job.source_language} SRT`}
+                      description="Original transcription — available now"
+                      url={job.srt_en_url}
+                    />
+                  )}
+                  {job.srt_zh_url && (
+                    <DownloadButton
+                      label={`${LANGUAGE_LABELS[job.target_language] ?? job.target_language} SRT`}
+                      description="Translation — available now"
+                      url={job.srt_zh_url}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
 
