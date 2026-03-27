@@ -91,10 +91,11 @@ export default function Nav() {
             <button
               onClick={handleManageBilling}
               className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-              title={me.has_billing ? "Manage billing" : "View pricing"}
+              title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
             >
               <CreditCard size={11} />
               {TIER_LABELS[me.tier] ?? me.tier}
+              {!me.has_billing && <span className="opacity-70">· Upgrade ↑</span>}
             </button>
           </>
         )}
