@@ -160,7 +160,7 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                 <div className="flex items-center gap-3">
                   <Loader2 size={16} className="animate-spin shrink-0 text-blue-500" />
                   <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
-                    {job.status === "pending" ? "Waiting in queue…" : stageLabel(job.progress_stage)}
+                    {job.status === "pending" ? "Waiting in queue…" : stageLabel(job.progress_stage, job.target_language)}
                   </p>
                 </div>
                 <button
@@ -174,7 +174,7 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
               </div>
 
               {job.status === "processing" && (
-                <ProgressSteps stage={job.progress_stage} />
+                <ProgressSteps stage={job.progress_stage} targetLanguage={job.target_language} />
               )}
 
               <p className="text-xs text-zinc-400">
@@ -263,15 +263,18 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
   );
 }
 
-const STAGES = [
-  { key: "downloading",  label: "Downloading video" },
-  { key: "transcribing", label: "Transcribing audio" },
-  { key: "translating",  label: "Translating to Chinese" },
-  { key: "rewriting",    label: "Applying style" },
-  { key: "building",     label: "Building subtitles" },
-  { key: "dubbing",      label: "Generating dubbed audio" },
-  { key: "uploading",    label: "Uploading files" },
-];
+function getStages(targetLanguage: string) {
+  const tgtLabel = LANGUAGE_LABELS[targetLanguage] ?? targetLanguage;
+  return [
+    { key: "downloading",  label: "Downloading video" },
+    { key: "transcribing", label: "Transcribing audio" },
+    { key: "translating",  label: `Translating to ${tgtLabel}` },
+    { key: "rewriting",    label: "Applying style" },
+    { key: "building",     label: "Building subtitles" },
+    { key: "dubbing",      label: "Generating dubbed audio" },
+    { key: "uploading",    label: "Uploading files" },
+  ];
+}
 
 function settingSummary(job: Job): string {
   const srcLabel = LANGUAGE_LABELS[job.source_language] ?? job.source_language;
@@ -291,8 +294,8 @@ function settingSummary(job: Job): string {
   return parts.join(" · ");
 }
 
-function stageLabel(stage: string | null | undefined): string {
-  return STAGES.find((s) => s.key === stage)?.label ?? "Processing…";
+function stageLabel(stage: string | null | undefined, targetLanguage: string): string {
+  return getStages(targetLanguage).find((s) => s.key === stage)?.label ?? "Processing…";
 }
 
 function estimatedTime(durationSeconds: number | null, stage: string | null | undefined): string {
@@ -310,12 +313,13 @@ function estimatedTime(durationSeconds: number | null, stage: string | null | un
   return `Estimated ~${estimatedMin} min total. This page updates automatically.`;
 }
 
-function ProgressSteps({ stage }: { stage: string | null | undefined }) {
-  const currentIndex = STAGES.findIndex((s) => s.key === stage);
+function ProgressSteps({ stage, targetLanguage }: { stage: string | null | undefined; targetLanguage: string }) {
+  const stages = getStages(targetLanguage);
+  const currentIndex = stages.findIndex((s) => s.key === stage);
 
   return (
     <div className="space-y-1.5">
-      {STAGES.map((s, i) => {
+      {stages.map((s, i) => {
         const done = i < currentIndex;
         const active = i === currentIndex;
         return (
