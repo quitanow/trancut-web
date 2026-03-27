@@ -391,7 +391,7 @@ export default function UploadZone() {
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
           字幕輸出
         </p>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {SUBTITLE_MODES.map((m) => (
             <button
               key={m.value}
