@@ -24,7 +24,7 @@ const REWRITE_STYLES_ROW1 = [
 ] as const;
 
 const REWRITE_STYLES_ROW2 = [
-  { value: "concise",      label: "精簡版",     desc: "保留核心，縮減約30%" },
+  { value: "concise",      label: "精簡版",     desc: "留存核心，精幹簡短" },
   { value: "vivid",        label: "生動口語",   desc: "擴展內容，通俗解說" },
 ] as const;
 
