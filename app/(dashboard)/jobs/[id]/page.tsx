@@ -268,14 +268,15 @@ function ProgressSteps({ stage }: { stage: string | null | undefined }) {
             <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${
               done ? "bg-green-500" : active ? "bg-blue-500" : "bg-zinc-300 dark:bg-zinc-600"
             }`} />
-            <span className={`text-xs ${
-              done ? "text-zinc-400 line-through" :
+            <span className={`text-xs flex-1 ${
+              done ? "text-zinc-400" :
               active ? "text-zinc-700 dark:text-zinc-200 font-medium" :
               "text-zinc-400"
             }`}>
               {s.label}
               {active && <span className="ml-1 text-blue-500">←</span>}
             </span>
+            {done && <span className="text-xs text-green-500">Completed</span>}
           </div>
         );
       })}
