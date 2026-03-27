@@ -75,7 +75,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-16 text-center">
+      <section id="pricing" className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-16 text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
             {t.pricing.title}

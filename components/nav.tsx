@@ -78,14 +78,24 @@ export default function Nav() {
       </div>
       <div className="flex items-center gap-3">
         {me && (
-          <button
-            onClick={handleManageBilling}
-            className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-            title={me.has_billing ? "Manage billing" : "Upgrade plan"}
-          >
-            <CreditCard size={11} />
-            {TIER_LABELS[me.tier] ?? me.tier}
-          </button>
+          <>
+            {!me.has_billing && (
+              <Link
+                href="/billing/checkout?plan=basic"
+                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+              >
+                Upgrade
+              </Link>
+            )}
+            <button
+              onClick={handleManageBilling}
+              className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
+              title={me.has_billing ? "Manage billing" : "View pricing"}
+            >
+              <CreditCard size={11} />
+              {TIER_LABELS[me.tier] ?? me.tier}
+            </button>
+          </>
         )}
         <button
           onClick={handleSignOut}
