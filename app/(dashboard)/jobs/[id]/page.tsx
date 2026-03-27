@@ -135,7 +135,7 @@ export default function JobResultPage({ params }: { params: Promise<{ id: string
                 </p>
               )}
               <p className="text-xs text-zinc-400 mt-1">
-                風格：{STYLE_LABELS[job.rewrite_style] ?? job.rewrite_style}
+                {settingSummary(job)}
               </p>
             </div>
             <StatusBadge status={job.status} />
@@ -235,6 +235,22 @@ const STAGES = [
   { key: "dubbing",      label: "Generating dubbed audio" },
   { key: "uploading",    label: "Uploading files" },
 ];
+
+function settingSummary(job: Job): string {
+  const styleLabel = STYLE_LABELS[job.rewrite_style] ?? job.rewrite_style;
+  const desc = job.rewrite_description ?? "";
+  let pct: string | null = null;
+  let extra = desc;
+  if (desc.startsWith("pct:")) {
+    const [first, ...rest] = desc.split("\n");
+    pct = first.slice(4).trim();
+    extra = rest.join("\n").trim();
+  }
+  const parts = [`風格：${styleLabel}`];
+  if (pct) parts.push(`${job.rewrite_style === "vivid" ? "擴充" : "精簡"} ${pct}%`);
+  if (extra) parts.push(extra);
+  return parts.join(" · ");
+}
 
 function stageLabel(stage: string | null | undefined): string {
   return STAGES.find((s) => s.key === stage)?.label ?? "Processing…";
