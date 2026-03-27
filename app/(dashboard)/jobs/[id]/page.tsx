@@ -17,16 +17,19 @@ const STYLE_LABELS: Record<string, string> = {
 };
 
 const LANGUAGE_LABELS: Record<string, string> = {
-  auto:  "Auto",
-  "zh-TW": "繁體中文",
-  "zh-CN": "简体中文",
-  en:    "English",
-  ja:    "日本語",
-  ko:    "한국어",
-  es:    "Español",
-  fr:    "Français",
-  de:    "Deutsch",
-  pt:    "Português",
+  auto: "Auto", "zh-TW": "繁體中文", "zh-CN": "简体中文", zh: "中文",
+  en: "English", ja: "日本語", ko: "한국어", es: "Español", fr: "Français",
+  de: "Deutsch", pt: "Português", ar: "العربية", ru: "Русский", hi: "हिन्दी",
+  it: "Italiano", nl: "Nederlands", pl: "Polski", sv: "Svenska", tr: "Türkçe",
+  vi: "Tiếng Việt", th: "ภาษาไทย", id: "Bahasa Indonesia", ms: "Bahasa Melayu",
+  uk: "Українська", cs: "Čeština", ro: "Română", da: "Dansk", fi: "Suomi",
+  hu: "Magyar", el: "Ελληνικά", he: "עברית", fa: "فارسی", ur: "اردو",
+  ta: "தமிழ்", af: "Afrikaans", bg: "Български", hr: "Hrvatski", sk: "Slovenčina",
+  sl: "Slovenščina", sr: "Српски", no: "Norsk", ca: "Català", et: "Eesti",
+  lv: "Latviešu", lt: "Lietuvių", mk: "Македонски", bs: "Bosanski", be: "Беларуская",
+  az: "Azərbaycan", hy: "Հայերեն", kk: "Қазақша", is: "Íslenska", ne: "नेपाली",
+  mr: "मराठी", kn: "ಕನ್ನಡ", sw: "Kiswahili", tl: "Filipino", mi: "Māori",
+  cy: "Cymraeg", gl: "Galego",
 };
 
 export default function JobResultPage({ params }: { params: Promise<{ id: string }> }) {
