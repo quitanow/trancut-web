@@ -92,13 +92,13 @@ export default function LandingPage() {
               tier="Basic"
               price="$9.99 / mo"
               features={["10 min / video", "30 videos / month", "All output formats", "Add-on credits available"]}
-              cta={{ label: "Subscribe", href: "/signup?plan=basic" }}
+              cta={{ label: "Subscribe", href: "/billing/checkout?plan=basic" }}
             />
             <PricingCard
               tier="Pro"
               price="$19.99 / mo"
               features={["20 min / video", "Unlimited videos", "All output formats", "Priority processing"]}
-              cta={{ label: "Subscribe", href: "/signup?plan=pro" }}
+              cta={{ label: "Subscribe", href: "/billing/checkout?plan=pro" }}
               highlight
             />
           </div>
