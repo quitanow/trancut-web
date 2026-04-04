@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "@/components/footer";
 
 export const metadata = {
   title: "Support — TranCut",
@@ -63,9 +64,7 @@ export default function SupportPage() {
         </div>
       </main>
 
-      <footer className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-6 text-center text-xs text-zinc-400">
-        © {new Date().getFullYear()} TranCut · <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-      </footer>
+      <Footer />
     </div>
   );
 }

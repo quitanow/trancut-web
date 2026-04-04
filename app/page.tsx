@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Subtitles, Zap, Globe, Download } from "lucide-react";
 import { useLocale } from "@/components/locale-provider";
 import LanguageSwitcher from "@/components/language-switcher";
+import Footer from "@/components/footer";
 
 export default function LandingPage() {
   const { t } = useLocale();
@@ -110,9 +111,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-zinc-100 dark:border-zinc-800 px-6 py-6 text-center text-xs text-zinc-400">
-        © {new Date().getFullYear()} {t.footer}
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
+import Footer from "@/components/footer";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -101,17 +102,20 @@ function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-zinc-50 dark:bg-zinc-950">
-      <div className="w-full max-w-sm">
-        <Link href="/" className="block text-center font-bold text-lg mb-8 tracking-tight">
-          TranCut
-        </Link>
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8">
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">{title}</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{subtitle}</p>
-          {children}
+    <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950">
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="w-full max-w-sm">
+          <Link href="/" className="block text-center font-bold text-lg mb-8 tracking-tight">
+            TranCut
+          </Link>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8">
+            <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">{title}</h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{subtitle}</p>
+            {children}
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

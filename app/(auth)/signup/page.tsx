@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
+import Footer from "@/components/footer";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -27,7 +28,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-zinc-50 dark:bg-zinc-950">
+    <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950">
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <Link href="/" className="block text-center font-bold text-lg mb-8 tracking-tight">
           TranCut
@@ -85,6 +87,8 @@ export default function SignupPage() {
           </p>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }
