@@ -12,14 +12,14 @@ const PLANS = [
   },
   {
     tier: "Basic",
-    price: "$9.99 / mo",
+    price: "$4.99 / mo",
     features: ["10 min / video", "30 videos / month", "All output formats", "Add-on credits available"],
     cta: { label: "Subscribe to Basic", href: "/billing/checkout?plan=basic" },
     highlight: false,
   },
   {
     tier: "Pro",
-    price: "$19.99 / mo",
+    price: "$9.99 / mo",
     features: ["20 min / video", "Unlimited videos", "All output formats", "Priority processing"],
     cta: { label: "Subscribe to Pro", href: "/billing/checkout?plan=pro" },
     highlight: true,
@@ -71,7 +71,7 @@ export default function PricingPage() {
         ))}
       </div>
       <p className="text-xs text-zinc-400 mt-6 text-center">
-        Need more? Buy 10 extra videos for $4.99 anytime — no plan change needed.
+        Need more? Buy 10 extra videos for $2.99 anytime — no plan change needed.
       </p>
     </div>
   );
