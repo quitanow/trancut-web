@@ -90,20 +90,20 @@ export default function LandingPage() {
             />
             <PricingCard
               tier="Basic"
-              price="$9.99 / mo"
+              price="$4.99 / mo"
               features={["10 min / video", "30 videos / month", "All output formats", "Add-on credits available"]}
               cta={{ label: "Subscribe", href: "/billing/checkout?plan=basic" }}
             />
             <PricingCard
               tier="Pro"
-              price="$19.99 / mo"
+              price="$9.99 / mo"
               features={["20 min / video", "Unlimited videos", "All output formats", "Priority processing"]}
               cta={{ label: "Subscribe", href: "/billing/checkout?plan=pro" }}
               highlight
             />
           </div>
           <p className="text-xs text-zinc-400 mt-6">
-            Need more? Buy 10 extra videos for $4.99 anytime — no plan change needed.
+            Need more? Buy 10 extra videos for $2.99 anytime — no plan change needed.
           </p>
         </div>
       </section>
