@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import { getMe, createPortalSession, type Me } from "@/lib/api";
 import { useLocale } from "@/components/locale-provider";
-import LanguageSwitcher from "@/components/language-switcher";
 import { Upload, Clock, LogOut, CreditCard, Sparkles } from "lucide-react";
 
 const TIER_LABELS: Record<string, string> = { free: "Free", basic: "Basic", pro: "Pro" };
@@ -100,7 +99,6 @@ export default function Nav() {
             </button>
           </>
         )}
-        <LanguageSwitcher />
         <button
           onClick={handleSignOut}
           className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"

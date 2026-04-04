@@ -10,9 +10,20 @@ function detectLocale(): Locale {
   const saved = localStorage.getItem(STORAGE_KEY) as Locale | null;
   if (saved && saved in translations) return saved;
   const lang = navigator.language; // e.g. "zh-TW", "zh-HK", "zh-CN", "fr-FR"
+  const base = lang.split("-")[0].toLowerCase();
+  // Chinese variants
   if (lang === "zh-TW" || lang === "zh-HK") return "zh-TW";
-  if (lang.startsWith("zh")) return "zh-CN";
-  return "en";
+  if (base === "zh") return "zh-CN";
+  // Map base language codes to supported locales
+  const map: Record<string, Locale> = {
+    ja: "ja", ko: "ko",
+    es: "es", fr: "fr", de: "de", pt: "pt",
+    ar: "ar", ru: "ru", hi: "hi",
+    it: "it", nl: "nl", tr: "tr",
+    vi: "vi", th: "th", id: "id", ms: "id",
+    pl: "pl",
+  };
+  return map[base] ?? "en";
 }
 
 interface LocaleContextValue {
