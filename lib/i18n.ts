@@ -243,3 +243,147 @@ export const translations = {
 } as const;
 
 export type Translations = typeof translations[Locale];
+
+// Upload zone UI strings — separate from the main translations object
+// so upload-zone.tsx can look them up without touching the rest of i18n.
+export const uploadZoneTranslations: Record<Locale, {
+  sourceLang: string; targetLang: string; style: string; subtitle: string; voice: string; autoDetect: string;
+  subtitleModes: { label: string; desc: string }[];
+  voices: { label: string; desc: string }[];
+  styles: { label: string; desc: string }[];
+  expandPct: string; trimPct: string;
+}> = {
+  en: {
+    sourceLang: "Video language", targetLang: "Translation language", style: "Narration style", subtitle: "Subtitle output", voice: "Dubbing voice", autoDetect: "Auto detect",
+    subtitleModes: [{ label: "No subtitles", desc: "SRT file only" }, { label: "Source subtitles", desc: "Burn source language" }, { label: "Target subtitles", desc: "Burn translated language" }],
+    voices: [{ label: "No dubbing", desc: "Subtitle file only" }, { label: "Warm female", desc: "Gentle, good for tutorials" }, { label: "Deep male", desc: "Powerful, good for narration" }, { label: "Natural neutral", desc: "Balanced, general use" }, { label: "Clear lecture", desc: "Clear, good for courses" }, { label: "Story narrator", desc: "Warm, good for documentaries" }, { label: "Premium quality", desc: "Refined, brand videos" }],
+    styles: [{ label: "Direct translation", desc: "Keep original, no rewrite" }, { label: "Documentary", desc: "Info-dense, engaging storytelling" }, { label: "Short-form social", desc: "Lively, for younger audiences" }, { label: "Concise", desc: "Keep core, trim length" }, { label: "Vivid colloquial", desc: "Expand content, casual tone" }],
+    expandPct: "Expansion", trimPct: "Trim",
+  },
+  "zh-TW": {
+    sourceLang: "影片語言", targetLang: "翻譯語言", style: "旁白風格", subtitle: "字幕輸出", voice: "配音聲音", autoDetect: "自動偵測",
+    subtitleModes: [{ label: "無字幕", desc: "僅輸出 SRT 檔" }, { label: "原文字幕", desc: "原始語言烙印" }, { label: "譯文字幕", desc: "翻譯語言烙印" }],
+    voices: [{ label: "無配音", desc: "僅輸出字幕檔" }, { label: "溫和女聲", desc: "親切柔和，適合教程" }, { label: "穩重男聲", desc: "深沉有力，適合解說" }, { label: "自然中性", desc: "均衡自然，通用場景" }, { label: "清晰講解", desc: "清晰明快，適合課程" }, { label: "故事旁白", desc: "溫暖敘述，適合紀錄片" }, { label: "高級質感", desc: "精緻細膩，品牌影片" }],
+    styles: [{ label: "直接翻譯", desc: "保留原始翻譯，不加工" }, { label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" }, { label: "社群短影音", desc: "活潑年輕，吸引新世代受眾" }, { label: "精簡版", desc: "留存核心，精幹簡短" }, { label: "生動口語", desc: "擴展內容，通俗解說" }],
+    expandPct: "擴充幅度", trimPct: "精簡幅度",
+  },
+  "zh-CN": {
+    sourceLang: "视频语言", targetLang: "翻译语言", style: "旁白风格", subtitle: "字幕输出", voice: "配音声音", autoDetect: "自动检测",
+    subtitleModes: [{ label: "无字幕", desc: "仅输出 SRT 文件" }, { label: "原文字幕", desc: "原始语言烙印" }, { label: "译文字幕", desc: "翻译语言烙印" }],
+    voices: [{ label: "无配音", desc: "仅输出字幕文件" }, { label: "温和女声", desc: "亲切柔和，适合教程" }, { label: "稳重男声", desc: "深沉有力，适合解说" }, { label: "自然中性", desc: "均衡自然，通用场景" }, { label: "清晰讲解", desc: "清晰明快，适合课程" }, { label: "故事旁白", desc: "温暖叙述，适合纪录片" }, { label: "高级质感", desc: "精致细腻，品牌视频" }],
+    styles: [{ label: "直接翻译", desc: "保留原始翻译，不加工" }, { label: "纪录片旁白", desc: "信息密度高，叙述通俗引人" }, { label: "社群短视频", desc: "活泼年轻，吸引新世代受众" }, { label: "精简版", desc: "留存核心，精干简短" }, { label: "生动口语", desc: "扩展内容，通俗解说" }],
+    expandPct: "扩充幅度", trimPct: "精简幅度",
+  },
+  ja: {
+    sourceLang: "動画の言語", targetLang: "翻訳言語", style: "ナレーションスタイル", subtitle: "字幕出力", voice: "吹き替え音声", autoDetect: "自動検出",
+    subtitleModes: [{ label: "字幕なし", desc: "SRTファイルのみ" }, { label: "原文字幕", desc: "元言語を焼き込み" }, { label: "訳文字幕", desc: "翻訳語を焼き込み" }],
+    voices: [{ label: "吹き替えなし", desc: "字幕ファイルのみ" }, { label: "温かい女声", desc: "穏やか、チュートリアル向き" }, { label: "重厚な男声", desc: "力強い、解説向き" }, { label: "自然なニュートラル", desc: "バランス型、汎用" }, { label: "明瞭な解説", desc: "クリア、講座向き" }, { label: "ストーリーナレーター", desc: "温かみ、ドキュメンタリー向き" }, { label: "プレミアム品質", desc: "洗練、ブランド動画" }],
+    styles: [{ label: "直訳", desc: "原訳をそのまま維持" }, { label: "ドキュメンタリー", desc: "情報密度高、引き込む語り" }, { label: "ショートSNS", desc: "活発、若い世代向け" }, { label: "簡潔版", desc: "核心を残し短縮" }, { label: "生き生きした口語", desc: "内容を展開、カジュアルなトーン" }],
+    expandPct: "拡張量", trimPct: "短縮量",
+  },
+  ko: {
+    sourceLang: "영상 언어", targetLang: "번역 언어", style: "내레이션 스타일", subtitle: "자막 출력", voice: "더빙 음성", autoDetect: "자동 감지",
+    subtitleModes: [{ label: "자막 없음", desc: "SRT 파일만" }, { label: "원문 자막", desc: "원본 언어 삽입" }, { label: "번역 자막", desc: "번역 언어 삽입" }],
+    voices: [{ label: "더빙 없음", desc: "자막 파일만" }, { label: "따뜻한 여성", desc: "부드러움, 튜토리얼에 적합" }, { label: "중후한 남성", desc: "강함, 해설에 적합" }, { label: "자연스러운 중성", desc: "균형적, 범용" }, { label: "명확한 강의", desc: "명료함, 강의에 적합" }, { label: "이야기 내레이터", desc: "따뜻함, 다큐멘터리에 적합" }, { label: "프리미엄 품질", desc: "세련됨, 브랜드 영상" }],
+    styles: [{ label: "직역", desc: "원본 번역 유지" }, { label: "다큐멘터리", desc: "정보 밀도 높음, 몰입감 있는 이야기" }, { label: "숏폼 소셜", desc: "활기차고, 젊은 시청자용" }, { label: "간결 버전", desc: "핵심 유지, 길이 줄임" }, { label: "생생한 구어체", desc: "내용 확장, 캐주얼한 톤" }],
+    expandPct: "확장량", trimPct: "축약량",
+  },
+  es: {
+    sourceLang: "Idioma del video", targetLang: "Idioma de traducción", style: "Estilo de narración", subtitle: "Salida de subtítulos", voice: "Voz de doblaje", autoDetect: "Detectar automáticamente",
+    subtitleModes: [{ label: "Sin subtítulos", desc: "Solo archivo SRT" }, { label: "Subtítulos originales", desc: "Quemar idioma fuente" }, { label: "Subtítulos traducidos", desc: "Quemar idioma destino" }],
+    voices: [{ label: "Sin doblaje", desc: "Solo archivo de subtítulos" }, { label: "Femenina cálida", desc: "Suave, ideal para tutoriales" }, { label: "Masculina profunda", desc: "Potente, ideal para narración" }, { label: "Neutro natural", desc: "Equilibrado, uso general" }, { label: "Conferencia clara", desc: "Claro, ideal para cursos" }, { label: "Narrador de historias", desc: "Cálido, ideal para documentales" }, { label: "Calidad premium", desc: "Refinado, videos de marca" }],
+    styles: [{ label: "Traducción directa", desc: "Mantener original sin cambios" }, { label: "Narración documental", desc: "Alta densidad, narrativa atractiva" }, { label: "Redes sociales cortas", desc: "Animado, para audiencias jóvenes" }, { label: "Conciso", desc: "Mantener lo esencial, reducir longitud" }, { label: "Coloquial vívido", desc: "Expandir contenido, tono casual" }],
+    expandPct: "Expansión", trimPct: "Reducción",
+  },
+  fr: {
+    sourceLang: "Langue de la vidéo", targetLang: "Langue de traduction", style: "Style de narration", subtitle: "Sortie de sous-titres", voice: "Voix de doublage", autoDetect: "Détection automatique",
+    subtitleModes: [{ label: "Sans sous-titres", desc: "Fichier SRT uniquement" }, { label: "Sous-titres source", desc: "Graver la langue source" }, { label: "Sous-titres traduits", desc: "Graver la langue cible" }],
+    voices: [{ label: "Sans doublage", desc: "Fichier de sous-titres uniquement" }, { label: "Féminine chaleureuse", desc: "Douce, idéale pour tutoriels" }, { label: "Masculine profonde", desc: "Puissante, idéale pour narration" }, { label: "Neutre naturelle", desc: "Équilibrée, usage général" }, { label: "Conférence claire", desc: "Claire, idéale pour cours" }, { label: "Narrateur d'histoires", desc: "Chaleureuse, idéale pour documentaires" }, { label: "Qualité premium", desc: "Raffinée, vidéos de marque" }],
+    styles: [{ label: "Traduction directe", desc: "Conserver l'original sans modification" }, { label: "Narration documentaire", desc: "Dense en info, récit engageant" }, { label: "Réseaux sociaux courts", desc: "Animé, pour jeune public" }, { label: "Concis", desc: "Garder l'essentiel, réduire la longueur" }, { label: "Langage vivant", desc: "Développer le contenu, ton décontracté" }],
+    expandPct: "Expansion", trimPct: "Réduction",
+  },
+  de: {
+    sourceLang: "Videosprache", targetLang: "Übersetzungssprache", style: "Erzählstil", subtitle: "Untertitelausgabe", voice: "Synchronstimme", autoDetect: "Automatisch erkennen",
+    subtitleModes: [{ label: "Keine Untertitel", desc: "Nur SRT-Datei" }, { label: "Originaluntertitel", desc: "Quellsprache einbrennen" }, { label: "Übersetzte Untertitel", desc: "Zielsprache einbrennen" }],
+    voices: [{ label: "Keine Synchronisation", desc: "Nur Untertiteldatei" }, { label: "Warme Frauenstimme", desc: "Sanft, für Tutorials geeignet" }, { label: "Tiefe Männerstimme", desc: "Kraftvoll, für Erklärungen" }, { label: "Natürlich neutral", desc: "Ausgewogen, allgemeine Verwendung" }, { label: "Klare Vorlesung", desc: "Klar, für Kurse geeignet" }, { label: "Geschichtenerzähler", desc: "Warm, für Dokumentationen" }, { label: "Premium-Qualität", desc: "Verfeinert, Markenvideos" }],
+    styles: [{ label: "Direkte Übersetzung", desc: "Original beibehalten" }, { label: "Dokumentarnarration", desc: "Informationsdicht, fesselnd" }, { label: "Kurzform Social", desc: "Lebhaft, für jüngeres Publikum" }, { label: "Prägnant", desc: "Kern behalten, kürzen" }, { label: "Lebhafte Umgangssprache", desc: "Inhalt erweitern, lockerer Ton" }],
+    expandPct: "Erweiterung", trimPct: "Kürzung",
+  },
+  pt: {
+    sourceLang: "Idioma do vídeo", targetLang: "Idioma de tradução", style: "Estilo de narração", subtitle: "Saída de legendas", voice: "Voz de dublagem", autoDetect: "Detectar automaticamente",
+    subtitleModes: [{ label: "Sem legendas", desc: "Apenas arquivo SRT" }, { label: "Legendas originais", desc: "Gravar idioma fonte" }, { label: "Legendas traduzidas", desc: "Gravar idioma alvo" }],
+    voices: [{ label: "Sem dublagem", desc: "Apenas arquivo de legendas" }, { label: "Voz feminina calorosa", desc: "Suave, ideal para tutoriais" }, { label: "Voz masculina profunda", desc: "Poderosa, ideal para narração" }, { label: "Neutro natural", desc: "Equilibrado, uso geral" }, { label: "Palestra clara", desc: "Clara, ideal para cursos" }, { label: "Narrador de histórias", desc: "Caloroso, ideal para documentários" }, { label: "Qualidade premium", desc: "Refinado, vídeos de marca" }],
+    styles: [{ label: "Tradução direta", desc: "Manter original sem alterações" }, { label: "Narração documental", desc: "Denso em informação, narrativa envolvente" }, { label: "Mídia social curta", desc: "Animado, para público jovem" }, { label: "Conciso", desc: "Manter o essencial, reduzir comprimento" }, { label: "Coloquial vívido", desc: "Expandir conteúdo, tom casual" }],
+    expandPct: "Expansão", trimPct: "Redução",
+  },
+  ar: {
+    sourceLang: "لغة الفيديو", targetLang: "لغة الترجمة", style: "أسلوب السرد", subtitle: "مخرجات الترجمة", voice: "صوت الدبلجة", autoDetect: "اكتشاف تلقائي",
+    subtitleModes: [{ label: "بدون ترجمة", desc: "ملف SRT فقط" }, { label: "ترجمة المصدر", desc: "تضمين اللغة الأصلية" }, { label: "الترجمة المستهدفة", desc: "تضمين اللغة المترجمة" }],
+    voices: [{ label: "بدون دبلجة", desc: "ملف ترجمة فقط" }, { label: "صوت نسائي دافئ", desc: "ناعم، مناسب للدروس" }, { label: "صوت رجالي عميق", desc: "قوي، مناسب للشرح" }, { label: "محايد طبيعي", desc: "متوازن، استخدام عام" }, { label: "محاضرة واضحة", desc: "واضح، مناسب للدورات" }, { label: "راوي القصص", desc: "دافئ، مناسب للوثائقيات" }, { label: "جودة مميزة", desc: "راقٍ، لفيديوهات العلامات التجارية" }],
+    styles: [{ label: "ترجمة مباشرة", desc: "الحفاظ على الأصل دون تعديل" }, { label: "سرد وثائقي", desc: "كثيف المعلومات، قصص جذابة" }, { label: "وسائل التواصل القصيرة", desc: "نشيط، للجمهور الشاب" }, { label: "موجز", desc: "الحفاظ على الجوهر، تقليل الطول" }, { label: "عامية حيوية", desc: "توسيع المحتوى، نبرة غير رسمية" }],
+    expandPct: "نسبة التوسع", trimPct: "نسبة التقليص",
+  },
+  ru: {
+    sourceLang: "Язык видео", targetLang: "Язык перевода", style: "Стиль повествования", subtitle: "Вывод субтитров", voice: "Голос дубляжа", autoDetect: "Автоопределение",
+    subtitleModes: [{ label: "Без субтитров", desc: "Только файл SRT" }, { label: "Субтитры оригинала", desc: "Вжечь исходный язык" }, { label: "Субтитры перевода", desc: "Вжечь целевой язык" }],
+    voices: [{ label: "Без дубляжа", desc: "Только файл субтитров" }, { label: "Тёплый женский", desc: "Мягкий, для обучающих видео" }, { label: "Глубокий мужской", desc: "Мощный, для повествования" }, { label: "Нейтральный", desc: "Сбалансированный, универсальный" }, { label: "Чёткая лекция", desc: "Ясный, для курсов" }, { label: "Рассказчик", desc: "Тёплый, для документальных фильмов" }, { label: "Премиум качество", desc: "Изысканный, для брендовых видео" }],
+    styles: [{ label: "Прямой перевод", desc: "Сохранить оригинал без изменений" }, { label: "Документальное повествование", desc: "Насыщенно, увлекательный рассказ" }, { label: "Короткие соцсети", desc: "Живо, для молодой аудитории" }, { label: "Краткий", desc: "Сохранить суть, сократить длину" }, { label: "Живой разговорный", desc: "Расширить содержание, непринуждённый тон" }],
+    expandPct: "Расширение", trimPct: "Сокращение",
+  },
+  hi: {
+    sourceLang: "वीडियो की भाषा", targetLang: "अनुवाद भाषा", style: "कथन शैली", subtitle: "उपशीर्षक आउटपुट", voice: "डबिंग आवाज़", autoDetect: "स्वतः पहचानें",
+    subtitleModes: [{ label: "कोई उपशीर्षक नहीं", desc: "केवल SRT फ़ाइल" }, { label: "मूल उपशीर्षक", desc: "स्रोत भाषा जलाएं" }, { label: "अनुवाद उपशीर्षक", desc: "लक्ष्य भाषा जलाएं" }],
+    voices: [{ label: "कोई डबिंग नहीं", desc: "केवल उपशीर्षक फ़ाइल" }, { label: "गर्म महिला स्वर", desc: "मृदु, ट्यूटोरियल के लिए" }, { label: "गहरा पुरुष स्वर", desc: "शक्तिशाली, कथन के लिए" }, { label: "प्राकृतिक तटस्थ", desc: "संतुलित, सामान्य उपयोग" }, { label: "स्पष्ट व्याख्यान", desc: "स्पष्ट, पाठ्यक्रम के लिए" }, { label: "कहानी कथावाचक", desc: "गर्म, वृत्तचित्र के लिए" }, { label: "प्रीमियम गुणवत्ता", desc: "परिष्कृत, ब्रांड वीडियो" }],
+    styles: [{ label: "सीधा अनुवाद", desc: "मूल को बिना बदलाव के रखें" }, { label: "वृत्तचित्र कथन", desc: "सूचना-घना, आकर्षक कहानी" }, { label: "सोशल शॉर्ट-फॉर्म", desc: "जीवंत, युवा दर्शकों के लिए" }, { label: "संक्षिप्त", desc: "मूल बनाए रखें, लंबाई कम करें" }, { label: "जीवंत बोलचाल", desc: "सामग्री विस्तार, आकस्मिक स्वर" }],
+    expandPct: "विस्तार", trimPct: "संक्षिप्त",
+  },
+  it: {
+    sourceLang: "Lingua del video", targetLang: "Lingua di traduzione", style: "Stile di narrazione", subtitle: "Output sottotitoli", voice: "Voce doppiaggio", autoDetect: "Rilevamento automatico",
+    subtitleModes: [{ label: "Senza sottotitoli", desc: "Solo file SRT" }, { label: "Sottotitoli originali", desc: "Incorpora lingua sorgente" }, { label: "Sottotitoli tradotti", desc: "Incorpora lingua target" }],
+    voices: [{ label: "Senza doppiaggio", desc: "Solo file sottotitoli" }, { label: "Femminile caldo", desc: "Morbido, per tutorial" }, { label: "Maschile profondo", desc: "Potente, per narrazione" }, { label: "Neutro naturale", desc: "Equilibrato, uso generale" }, { label: "Lezione chiara", desc: "Chiaro, per corsi" }, { label: "Narratore di storie", desc: "Caldo, per documentari" }, { label: "Qualità premium", desc: "Raffinato, video di marca" }],
+    styles: [{ label: "Traduzione diretta", desc: "Mantieni originale senza modifiche" }, { label: "Narrazione documentaria", desc: "Ricco di info, narrativa coinvolgente" }, { label: "Social short-form", desc: "Vivace, per giovane pubblico" }, { label: "Conciso", desc: "Mantieni il nucleo, riduci la lunghezza" }, { label: "Colloquiale vivace", desc: "Espandi contenuto, tono casual" }],
+    expandPct: "Espansione", trimPct: "Riduzione",
+  },
+  nl: {
+    sourceLang: "Videotaal", targetLang: "Vertaaltaal", style: "Vertellerstijl", subtitle: "Ondertiteluitvoer", voice: "Nasynchronisatiestem", autoDetect: "Automatisch detecteren",
+    subtitleModes: [{ label: "Geen ondertitels", desc: "Alleen SRT-bestand" }, { label: "Brontaalondertitels", desc: "Brontaal inbranden" }, { label: "Vertaalde ondertitels", desc: "Doeltaal inbranden" }],
+    voices: [{ label: "Geen nasynchronisatie", desc: "Alleen ondertitelbestand" }, { label: "Warme vrouwenstem", desc: "Zacht, voor tutorials" }, { label: "Diepe mannenstem", desc: "Krachtig, voor vertelling" }, { label: "Natuurlijk neutraal", desc: "Gebalanceerd, algemeen gebruik" }, { label: "Duidelijk college", desc: "Helder, voor cursussen" }, { label: "Verhalenverteller", desc: "Warm, voor documentaires" }, { label: "Premiumkwaliteit", desc: "Verfijnd, merkvideos" }],
+    styles: [{ label: "Directe vertaling", desc: "Origineel behouden zonder wijzigingen" }, { label: "Documentairevertellingen", desc: "Informatierijk, boeiend verhaal" }, { label: "Social short-form", desc: "Levendig, voor jong publiek" }, { label: "Beknopt", desc: "Kern behouden, lengte verminderen" }, { label: "Levendige spreektaal", desc: "Inhoud uitbreiden, informele toon" }],
+    expandPct: "Uitbreiding", trimPct: "Inkorten",
+  },
+  tr: {
+    sourceLang: "Video dili", targetLang: "Çeviri dili", style: "Anlatım stili", subtitle: "Altyazı çıktısı", voice: "Dublaj sesi", autoDetect: "Otomatik algıla",
+    subtitleModes: [{ label: "Altyazı yok", desc: "Yalnızca SRT dosyası" }, { label: "Kaynak altyazı", desc: "Kaynak dili yaz" }, { label: "Çeviri altyazısı", desc: "Hedef dili yaz" }],
+    voices: [{ label: "Dublaj yok", desc: "Yalnızca altyazı dosyası" }, { label: "Sıcak kadın sesi", desc: "Yumuşak, eğitimler için" }, { label: "Derin erkek sesi", desc: "Güçlü, anlatım için" }, { label: "Doğal nötr", desc: "Dengeli, genel kullanım" }, { label: "Net ders anlatımı", desc: "Açık, kurslar için" }, { label: "Hikaye anlatıcısı", desc: "Sıcak, belgeseller için" }, { label: "Premium kalite", desc: "İnce, marka videoları" }],
+    styles: [{ label: "Doğrudan çeviri", desc: "Orijinali değiştirmeden koruyun" }, { label: "Belgesel anlatımı", desc: "Bilgi yoğun, sürükleyici hikaye" }, { label: "Kısa sosyal medya", desc: "Canlı, genç kitle için" }, { label: "Kısa özet", desc: "Özü koruyun, uzunluğu azaltın" }, { label: "Canlı konuşma dili", desc: "İçeriği genişletin, rahat ton" }],
+    expandPct: "Genişleme", trimPct: "Kısaltma",
+  },
+  vi: {
+    sourceLang: "Ngôn ngữ video", targetLang: "Ngôn ngữ dịch", style: "Phong cách kể chuyện", subtitle: "Đầu ra phụ đề", voice: "Giọng lồng tiếng", autoDetect: "Tự động phát hiện",
+    subtitleModes: [{ label: "Không có phụ đề", desc: "Chỉ tệp SRT" }, { label: "Phụ đề gốc", desc: "Ghi ngôn ngữ nguồn" }, { label: "Phụ đề dịch", desc: "Ghi ngôn ngữ đích" }],
+    voices: [{ label: "Không lồng tiếng", desc: "Chỉ tệp phụ đề" }, { label: "Giọng nữ ấm áp", desc: "Nhẹ nhàng, phù hợp hướng dẫn" }, { label: "Giọng nam trầm", desc: "Mạnh mẽ, phù hợp thuyết minh" }, { label: "Trung tính tự nhiên", desc: "Cân bằng, dùng chung" }, { label: "Giảng dạy rõ ràng", desc: "Rõ ràng, phù hợp khóa học" }, { label: "Người kể chuyện", desc: "Ấm áp, phù hợp tài liệu" }, { label: "Chất lượng cao cấp", desc: "Tinh tế, video thương hiệu" }],
+    styles: [{ label: "Dịch trực tiếp", desc: "Giữ nguyên bản dịch gốc" }, { label: "Thuyết minh tài liệu", desc: "Thông tin dày, câu chuyện hấp dẫn" }, { label: "Mạng xã hội ngắn", desc: "Sôi động, cho khán giả trẻ" }, { label: "Súc tích", desc: "Giữ cốt lõi, giảm độ dài" }, { label: "Ngôn ngữ nói sinh động", desc: "Mở rộng nội dung, giọng thân mật" }],
+    expandPct: "Mức mở rộng", trimPct: "Mức rút gọn",
+  },
+  th: {
+    sourceLang: "ภาษาของวิดีโอ", targetLang: "ภาษาที่แปล", style: "สไตล์การบรรยาย", subtitle: "ผลลัพธ์คำบรรยาย", voice: "เสียงพากย์", autoDetect: "ตรวจจับอัตโนมัติ",
+    subtitleModes: [{ label: "ไม่มีคำบรรยาย", desc: "ไฟล์ SRT เท่านั้น" }, { label: "คำบรรยายต้นฉบับ", desc: "เผาภาษาต้นฉบับ" }, { label: "คำบรรยายแปล", desc: "เผาภาษาเป้าหมาย" }],
+    voices: [{ label: "ไม่มีการพากย์", desc: "ไฟล์คำบรรยายเท่านั้น" }, { label: "เสียงหญิงอบอุ่น", desc: "นุ่มนวล เหมาะสำหรับบทเรียน" }, { label: "เสียงชายลึก", desc: "ทรงพลัง เหมาะสำหรับบรรยาย" }, { label: "กลางธรรมชาติ", desc: "สมดุล ใช้ทั่วไป" }, { label: "บรรยายชัดเจน", desc: "ชัดเจน เหมาะสำหรับคอร์ส" }, { label: "ผู้เล่าเรื่อง", desc: "อบอุ่น เหมาะสำหรับสารคดี" }, { label: "คุณภาพพรีเมียม", desc: "ประณีต วิดีโอแบรนด์" }],
+    styles: [{ label: "แปลตรง", desc: "รักษาต้นฉบับโดยไม่เปลี่ยน" }, { label: "บรรยายสารคดี", desc: "ข้อมูลหนาแน่น เรื่องราวน่าสนใจ" }, { label: "โซเชียลมีเดียสั้น", desc: "มีชีวิตชีวา สำหรับผู้ชมรุ่นใหม่" }, { label: "กระชับ", desc: "รักษาแก่น ลดความยาว" }, { label: "ภาษาพูดที่สดใส", desc: "ขยายเนื้อหา โทนสบายๆ" }],
+    expandPct: "ระดับการขยาย", trimPct: "ระดับการตัด",
+  },
+  id: {
+    sourceLang: "Bahasa video", targetLang: "Bahasa terjemahan", style: "Gaya narasi", subtitle: "Output subtitle", voice: "Suara dubbing", autoDetect: "Deteksi otomatis",
+    subtitleModes: [{ label: "Tanpa subtitle", desc: "File SRT saja" }, { label: "Subtitle asli", desc: "Bakar bahasa sumber" }, { label: "Subtitle terjemahan", desc: "Bakar bahasa target" }],
+    voices: [{ label: "Tanpa dubbing", desc: "File subtitle saja" }, { label: "Suara wanita hangat", desc: "Lembut, cocok untuk tutorial" }, { label: "Suara pria dalam", desc: "Kuat, cocok untuk narasi" }, { label: "Netral alami", desc: "Seimbang, penggunaan umum" }, { label: "Kuliah jelas", desc: "Jelas, cocok untuk kursus" }, { label: "Pencerita", desc: "Hangat, cocok untuk dokumenter" }, { label: "Kualitas premium", desc: "Halus, video merek" }],
+    styles: [{ label: "Terjemahan langsung", desc: "Pertahankan asli tanpa perubahan" }, { label: "Narasi dokumenter", desc: "Padat info, cerita menarik" }, { label: "Media sosial pendek", desc: "Ceria, untuk penonton muda" }, { label: "Ringkas", desc: "Pertahankan inti, kurangi panjang" }, { label: "Bahasa sehari-hari hidup", desc: "Perluas konten, nada santai" }],
+    expandPct: "Perluasan", trimPct: "Pengurangan",
+  },
+  pl: {
+    sourceLang: "Język wideo", targetLang: "Język tłumaczenia", style: "Styl narracji", subtitle: "Wyjście napisów", voice: "Głos lektora", autoDetect: "Automatyczne wykrywanie",
+    subtitleModes: [{ label: "Bez napisów", desc: "Tylko plik SRT" }, { label: "Napisy oryginalne", desc: "Wypal język źródłowy" }, { label: "Napisy tłumaczone", desc: "Wypal język docelowy" }],
+    voices: [{ label: "Bez lektora", desc: "Tylko plik napisów" }, { label: "Ciepły głos kobiecy", desc: "Łagodny, do tutoriali" }, { label: "Głęboki głos męski", desc: "Mocny, do narracji" }, { label: "Neutralny naturalny", desc: "Zrównoważony, ogólne użycie" }, { label: "Wyraźny wykład", desc: "Jasny, do kursów" }, { label: "Gawędziarz", desc: "Ciepły, do dokumentów" }, { label: "Jakość premium", desc: "Wyrafinowany, filmy markowe" }],
+    styles: [{ label: "Tłumaczenie dosłowne", desc: "Zachowaj oryginał bez zmian" }, { label: "Narracja dokumentalna", desc: "Gęsta informacyjnie, wciągająca" }, { label: "Krótkie social media", desc: "Żywe, dla młodych odbiorców" }, { label: "Zwięzłe", desc: "Zachowaj sedno, skróć długość" }, { label: "Żywy potoczny", desc: "Rozszerz treść, swobodny ton" }],
+    expandPct: "Rozszerzenie", trimPct: "Skrócenie",
+  },
+};

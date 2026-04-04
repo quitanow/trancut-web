@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { getPresignedUrl, uploadToR2, createJob, getMe } from "@/lib/api";
 import { Upload, Film, AlertCircle } from "lucide-react";
+import { useLocale } from "@/components/locale-provider";
+import { uploadZoneTranslations } from "@/lib/i18n";
 
 const ACCEPTED = ["video/mp4", "video/quicktime", "video/x-m4v"];
 const FREE_MAX_SECONDS = 120;
 const PRO_MAX_SECONDS = 1200;
 
-const SOURCE_LANGUAGES = [
-  { value: "auto", label: "自動偵測" },
+const SOURCE_LANGUAGES_BASE = [
+  { value: "auto", label: "__auto__" },
   { value: "zh",   label: "中文" },
   { value: "en",   label: "English" },
   { value: "ja",   label: "日本語" },
@@ -142,39 +144,16 @@ type Stage =
   | { type: "queued"; jobId: string }
   | { type: "error"; message: string };
 
-const SUBTITLE_MODES = [
-  { value: "",       label: "無字幕",   desc: "僅輸出 SRT 檔" },
-  { value: "source", label: "原文字幕", desc: "原始語言烙印" },
-  { value: "target", label: "譯文字幕", desc: "翻譯語言烙印" },
-];
+const SUBTITLE_MODE_VALUES = ["", "source", "target"] as const;
+const TTS_VOICE_VALUES = ["", "shimmer", "onyx", "alloy", "coral", "fable", "nova"] as const;
+const REWRITE_STYLE_VALUES = ["none", "documentary", "social", "concise", "vivid"] as const;
 
-const TTS_VOICES = [
-  { value: "",        label: "無配音",   desc: "僅輸出字幕檔" },
-  { value: "shimmer", label: "溫和女聲", desc: "親切柔和，適合教程" },
-  { value: "onyx",    label: "穩重男聲", desc: "深沉有力，適合解說" },
-  { value: "alloy",   label: "自然中性", desc: "均衡自然，通用場景" },
-  { value: "coral",   label: "清晰講解", desc: "清晰明快，適合課程" },
-  { value: "fable",   label: "故事旁白", desc: "溫暖敘述，適合紀錄片" },
-  { value: "nova",    label: "高級質感", desc: "精緻細膩，品牌影片" },
-];
-
-const REWRITE_STYLES_ROW1 = [
-  { value: "none",         label: "直接翻譯",   desc: "保留原始翻譯，不加工" },
-  { value: "documentary",  label: "紀錄片旁白", desc: "信息密度高，敘述通俗引人" },
-  { value: "social",       label: "社群短影音", desc: "活潑年輕，吸引新世代受眾" },
-] as const;
-
-const REWRITE_STYLES_ROW2 = [
-  { value: "concise",      label: "精簡版",     desc: "留存核心，精幹簡短" },
-  { value: "vivid",        label: "生動口語",   desc: "擴展內容，通俗解說" },
-] as const;
-
-const REWRITE_STYLES = [...REWRITE_STYLES_ROW1, ...REWRITE_STYLES_ROW2];
-
-type RewriteStyle = typeof REWRITE_STYLES[number]["value"];
+type RewriteStyle = typeof REWRITE_STYLE_VALUES[number];
 
 export default function UploadZone() {
   const router = useRouter();
+  const { locale } = useLocale();
+  const uz = uploadZoneTranslations[locale];
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<Stage>({ type: "idle" });
   const [dragging, setDragging] = useState(false);
@@ -185,6 +164,15 @@ export default function UploadZone() {
   const [rewritePercentage, setRewritePercentage] = useState<"20" | "40" | "60">("40");
   const [ttsVoice, setTtsVoice] = useState("");
   const [subtitleMode, setSubtitleMode] = useState("");
+
+  const SOURCE_LANGUAGES = SOURCE_LANGUAGES_BASE.map((l) =>
+    l.value === "auto" ? { ...l, label: uz.autoDetect } : l
+  );
+  const SUBTITLE_MODES = SUBTITLE_MODE_VALUES.map((v, i) => ({ value: v, ...uz.subtitleModes[i] }));
+  const TTS_VOICES = TTS_VOICE_VALUES.map((v, i) => ({ value: v, ...uz.voices[i] }));
+  const REWRITE_STYLES = REWRITE_STYLE_VALUES.map((v, i) => ({ value: v, ...uz.styles[i] }));
+  const REWRITE_STYLES_ROW1 = REWRITE_STYLES.slice(0, 3);
+  const REWRITE_STYLES_ROW2 = REWRITE_STYLES.slice(3);
 
   const processFile = useCallback(async (file: File, style: RewriteStyle = rewriteStyle, voice: string = ttsVoice, subtitle: string = subtitleMode) => {
     if (!ACCEPTED.includes(file.type)) {
@@ -279,7 +267,7 @@ export default function UploadZone() {
       <div className={`mb-5 flex items-center gap-3 ${busy ? "pointer-events-none opacity-60" : ""}`}>
         <div className="flex-1">
           <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide block mb-1.5">
-            影片語言
+            {uz.sourceLang}
           </label>
           <select
             value={sourceLanguage}
@@ -294,7 +282,7 @@ export default function UploadZone() {
         <div className="text-zinc-400 mt-5">→</div>
         <div className="flex-1">
           <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide block mb-1.5">
-            翻譯語言
+            {uz.targetLang}
           </label>
           <select
             value={targetLanguage}
@@ -311,7 +299,7 @@ export default function UploadZone() {
       {/* Style selector — always visible */}
       <div className="mb-5">
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
-          旁白風格
+          {uz.style}
         </p>
         {/* Row 1: 直接翻譯 · 紀錄片旁白 · 社群短影音 */}
         <div className={`grid grid-cols-3 gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
@@ -357,7 +345,7 @@ export default function UploadZone() {
         {(rewriteStyle === "vivid" || rewriteStyle === "concise") && (
           <div className={`mt-2.5 flex items-center justify-center gap-2 ${busy ? "pointer-events-none opacity-60" : ""}`}>
             <span className="text-xs text-zinc-400">
-              {rewriteStyle === "vivid" ? "擴充幅度" : "精簡幅度"}：
+              {rewriteStyle === "vivid" ? uz.expandPct : uz.trimPct}：
             </span>
             {(["20", "40", "60"] as const).map((pct) => (
               <button
@@ -389,7 +377,7 @@ export default function UploadZone() {
       {/* Subtitle mode selector */}
       <div className={`mb-5 ${busy ? "pointer-events-none opacity-60" : ""}`}>
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
-          字幕輸出
+          {uz.subtitle}
         </p>
         <div className="grid grid-cols-3 gap-2">
           {SUBTITLE_MODES.map((m) => (
@@ -413,7 +401,7 @@ export default function UploadZone() {
       {/* Voice selector */}
       <div className={`mb-5 ${busy ? "pointer-events-none opacity-60" : ""}`}>
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
-          配音聲音
+          {uz.voice}
         </p>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-7">
           {TTS_VOICES.map((v) => (
