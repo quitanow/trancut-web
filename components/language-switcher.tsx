@@ -3,7 +3,10 @@
 import { type Locale, localeLabels } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-provider";
 
-const locales: Locale[] = ["en", "zh-TW", "zh-CN"];
+const locales: Locale[] = [
+  "en", "zh-TW", "zh-CN", "ja", "ko", "es", "fr", "de", "pt",
+  "ar", "ru", "hi", "it", "nl", "tr", "vi", "th", "id", "pl",
+];
 
 export default function LanguageSwitcher() {
   const { locale, setLocale } = useLocale();

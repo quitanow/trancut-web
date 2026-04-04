@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Subtitles, Zap, Globe, Download } from "lucide-react";
 import { useLocale } from "@/components/locale-provider";
+import LanguageSwitcher from "@/components/language-switcher";
 
 export default function LandingPage() {
   const { t } = useLocale();
@@ -12,7 +13,8 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-4 flex justify-between items-center">
         <span className="font-bold text-lg tracking-tight">TranCut</span>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <Link
             href="/login"
             className="text-sm px-4 py-2 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
