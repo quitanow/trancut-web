@@ -145,7 +145,7 @@ type Stage =
   | { type: "error"; message: string };
 
 const SUBTITLE_MODE_VALUES = ["", "source", "target"] as const;
-const TTS_VOICE_VALUES = ["", "shimmer", "onyx", "alloy", "coral", "fable", "nova"] as const;
+const TTS_VOICE_VALUES = ["shimmer", "onyx", "alloy", "coral", "fable", "nova"] as const;
 const REWRITE_STYLE_VALUES = ["none", "documentary", "social", "concise", "vivid"] as const;
 
 type RewriteStyle = typeof REWRITE_STYLE_VALUES[number];
@@ -169,7 +169,8 @@ export default function UploadZone() {
     l.value === "auto" ? { ...l, label: uz.autoDetect } : l
   );
   const SUBTITLE_MODES = SUBTITLE_MODE_VALUES.map((v, i) => ({ value: v, ...uz.subtitleModes[i] }));
-  const TTS_VOICES = TTS_VOICE_VALUES.map((v, i) => ({ value: v, ...uz.voices[i] }));
+  // uz.voices[0] is "No dubbing" — skip it, map remaining 6 voices
+  const TTS_VOICES = TTS_VOICE_VALUES.map((v, i) => ({ value: v, ...uz.voices[i + 1] }));
   const REWRITE_STYLES = REWRITE_STYLE_VALUES.map((v, i) => ({ value: v, ...uz.styles[i] }));
   const REWRITE_STYLES_ROW1 = REWRITE_STYLES.slice(0, 3);
   const REWRITE_STYLES_ROW2 = REWRITE_STYLES.slice(3);
@@ -403,7 +404,7 @@ export default function UploadZone() {
         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
           {uz.voice}
         </p>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-7">
+        <div className="grid grid-cols-3 gap-2">
           {TTS_VOICES.map((v) => (
             <button
               key={v.value}
