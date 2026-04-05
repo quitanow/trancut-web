@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Subtitles, Zap, Globe, Download } from "lucide-react";
 import { useLocale } from "@/components/locale-provider";
 import LanguageSwitcher from "@/components/language-switcher";
@@ -13,7 +14,10 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
       {/* Nav */}
       <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-4 flex justify-between items-center">
-        <span className="font-bold text-lg tracking-tight">TranCut</span>
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="TranCut" width={28} height={28} className="rounded-md" />
+          <span className="font-bold text-lg tracking-tight">TranCut</span>
+        </div>
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           <Link

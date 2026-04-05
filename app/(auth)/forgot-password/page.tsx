@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
+import Image from "next/image";
 import Footer from "@/components/footer";
 
 export default function ForgotPasswordPage() {
@@ -31,8 +32,9 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-zinc-950">
       <div className="flex-1 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <Link href="/" className="block text-center font-bold text-lg mb-8 tracking-tight">
-          TranCut
+        <Link href="/" className="flex items-center justify-center gap-2 mb-8">
+          <Image src="/logo.png" alt="TranCut" width={32} height={32} className="rounded-lg" />
+          <span className="font-bold text-lg tracking-tight">TranCut</span>
         </Link>
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8">
           {sent ? (

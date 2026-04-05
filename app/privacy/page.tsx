@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Footer from "@/components/footer";
 
 export const metadata = {
@@ -10,7 +11,10 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
       <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="font-bold tracking-tight">TranCut</Link>
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="TranCut" width={28} height={28} className="rounded-md" />
+          <span className="font-bold tracking-tight">TranCut</span>
+        </Link>
       </nav>
 
       <main className="max-w-2xl mx-auto px-6 py-12 prose dark:prose-invert">

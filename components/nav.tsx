@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
@@ -58,8 +59,9 @@ export default function Nav() {
   return (
     <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-3 flex justify-between items-center">
       <div className="flex items-center gap-6">
-        <Link href="/upload" className="font-bold tracking-tight">
-          TranCut
+        <Link href="/upload" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="TranCut" width={28} height={28} className="rounded-md" />
+          <span className="font-bold tracking-tight">TranCut</span>
         </Link>
         <div className="flex gap-1">
           {links.map(({ href, label, icon: Icon }) => (
