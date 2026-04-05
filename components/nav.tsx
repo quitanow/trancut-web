@@ -56,40 +56,37 @@ export default function Nav() {
   }
 
   return (
-    <nav className="border-b border-zinc-100 dark:border-zinc-800 px-3 py-3 flex justify-between items-center">
-      <div className="flex gap-0.5">
-        {links.map(({ href, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`text-sm px-2.5 py-1.5 rounded-lg transition-colors ${
-              pathname === href
-                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-medium"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
-            }`}
-          >
-            {label}
-          </Link>
-        ))}
-      </div>
-      <div className="flex items-center gap-2">
-        {me && (
-          <button
-            onClick={handleManageBilling}
-            className={`hidden sm:flex text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-            title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
-          >
-            {TIER_LABELS[me.tier] ?? me.tier}
-          </button>
-        )}
-        <LanguageSwitcher />
-        <button
-          onClick={handleSignOut}
-          className="text-sm text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+    <nav className="border-b border-zinc-100 dark:border-zinc-800 px-3 py-3 flex justify-center items-center gap-1">
+      {links.map(({ href, label }) => (
+        <Link
+          key={href}
+          href={href}
+          className={`text-sm px-2.5 py-1.5 rounded-lg transition-colors ${
+            pathname === href
+              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-medium"
+              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+          }`}
         >
-          {t.nav.signOut}
+          {label}
+        </Link>
+      ))}
+      <span className="text-zinc-200 dark:text-zinc-700 px-1">·</span>
+      {me && (
+        <button
+          onClick={handleManageBilling}
+          className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
+          title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
+        >
+          {TIER_LABELS[me.tier] ?? me.tier}
         </button>
-      </div>
+      )}
+      <LanguageSwitcher />
+      <button
+        onClick={handleSignOut}
+        className="text-sm text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+      >
+        {t.nav.signOut}
+      </button>
     </nav>
   );
 }
