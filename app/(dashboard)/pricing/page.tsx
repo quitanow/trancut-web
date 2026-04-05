@@ -2,39 +2,25 @@
 
 import Link from "next/link";
 import { Check } from "lucide-react";
-
-const PLANS = [
-  {
-    tier: "Free",
-    price: "$0",
-    features: ["2 min / video", "5 videos / month", "All output formats"],
-    cta: null,
-  },
-  {
-    tier: "Basic",
-    price: "$4.99 / mo",
-    features: ["10 min / video", "30 videos / month", "All output formats", "Add-on credits available"],
-    cta: { label: "Subscribe to Basic", href: "/billing/checkout?plan=basic" },
-    highlight: false,
-  },
-  {
-    tier: "Pro",
-    price: "$9.99 / mo",
-    features: ["20 min / video", "Unlimited videos", "All output formats", "Priority processing"],
-    cta: { label: "Subscribe to Pro", href: "/billing/checkout?plan=pro" },
-    highlight: true,
-  },
-];
+import { useLocale } from "@/components/locale-provider";
+import { pricingPageTranslations } from "@/lib/i18n";
 
 export default function PricingPage() {
+  const { locale } = useLocale();
+  const p = pricingPageTranslations[locale];
+
+  const plans = [
+    { tier: "Free", price: "$0", features: p.freeFeatures, cta: null, highlight: false },
+    { tier: "Basic", price: "$4.99 / mo", features: p.basicFeatures, cta: { label: p.subscribeBasic, href: "/billing/checkout?plan=basic" }, highlight: false },
+    { tier: "Pro", price: "$9.99 / mo", features: p.proFeatures, cta: { label: p.subscribePro, href: "/billing/checkout?plan=pro" }, highlight: true },
+  ];
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Choose a plan</h1>
-      <p className="text-zinc-500 dark:text-zinc-400 mb-8">
-        Upgrade anytime. Cancel anytime.
-      </p>
+      <h1 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{p.title}</h1>
+      <p className="text-zinc-500 dark:text-zinc-400 mb-8">{p.subtitle}</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {PLANS.map((plan) => (
+        {plans.map((plan) => (
           <div
             key={plan.tier}
             className={`rounded-xl p-5 border flex flex-col ${
@@ -65,14 +51,12 @@ export default function PricingPage() {
                 {plan.cta.label}
               </Link>
             ) : (
-              <div className="text-center text-sm text-zinc-400 py-2">Current free plan</div>
+              <div className="text-center text-sm text-zinc-400 py-2">{p.currentPlan}</div>
             )}
           </div>
         ))}
       </div>
-      <p className="text-xs text-zinc-400 mt-6 text-center">
-        Need more? Buy 10 extra videos for $2.99 anytime — no plan change needed.
-      </p>
+      <p className="text-xs text-zinc-400 mt-6 text-center">{p.addOn}</p>
     </div>
   );
 }
