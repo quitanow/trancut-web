@@ -368,7 +368,7 @@ export default function UploadZone() {
           value={rewriteDescription}
           onChange={(e) => setRewriteDescription(e.target.value)}
           disabled={busy}
-          placeholder="Describe what you'd like to rewrite (optional)…"
+          placeholder={uz.rewritePlaceholder}
           rows={2}
           className="mt-3 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-colors disabled:opacity-60"
         />
@@ -454,10 +454,10 @@ export default function UploadZone() {
         >
           <Upload size={32} className="mx-auto mb-4 text-zinc-400" />
           <p className="font-medium text-zinc-700 dark:text-zinc-200 mb-1">
-            Drop your video here
+            {uz.dropTitle}
           </p>
-          <p className="text-sm text-zinc-400">or click to browse · MP4, MOV, M4V</p>
-          <p className="text-xs text-zinc-400 mt-3">Free plan: up to 2 min · Pro: up to 20 min</p>
+          <p className="text-sm text-zinc-400">{uz.dropSubtitle}</p>
+          <p className="text-xs text-zinc-400 mt-3">{uz.dropNote}</p>
         </div>
       )}
 
