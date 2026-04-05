@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import Image from "next/image";
 import Footer from "@/components/footer";
+import { useLocale } from "@/components/locale-provider";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,11 +19,11 @@ export default function ResetPasswordPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password !== confirm) {
-      setError("Passwords do not match.");
+      setError(t.auth.passwordsNoMatch);
       return;
     }
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(t.auth.passwordTooShort);
       return;
     }
     setError("");
@@ -45,14 +47,14 @@ export default function ResetPasswordPage() {
           <span className="font-bold text-lg tracking-tight">TranCut</span>
         </Link>
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8">
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">Set new password</h1>
+          <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">{t.auth.setNewPassword}</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-            Choose a new password for your account.
+            {t.auth.setNewPasswordSubtitle}
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                New password
+                {t.auth.newPassword}
               </label>
               <input
                 type="password"
@@ -64,7 +66,7 @@ export default function ResetPasswordPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                Confirm password
+                {t.auth.confirmPassword}
               </label>
               <input
                 type="password"
@@ -80,7 +82,7 @@ export default function ResetPasswordPage() {
               disabled={loading}
               className="w-full py-2.5 bg-zinc-900 text-white rounded-lg font-medium hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
             >
-              {loading ? "Updating…" : "Update password"}
+              {loading ? t.auth.updating : t.auth.updatePassword}
             </button>
           </form>
         </div>

@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import Image from "next/image";
 import Footer from "@/components/footer";
+import { useLocale } from "@/components/locale-provider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,14 +31,14 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to your TranCut account">
+    <AuthLayout title={t.auth.loginTitle} subtitle={t.auth.loginSubtitle}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field label="Email" type="email" value={email} onChange={setEmail} />
+        <Field label={t.auth.email} type="email" value={email} onChange={setEmail} />
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Password</label>
+            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{t.auth.password}</label>
             <Link href="/forgot-password" className="text-xs text-zinc-400 hover:text-blue-600 transition-colors">
-              Forgot password?
+              {t.auth.forgotPassword}
             </Link>
           </div>
           <input
@@ -53,13 +55,13 @@ export default function LoginPage() {
           disabled={loading}
           className="w-full py-2.5 bg-zinc-900 text-white rounded-lg font-medium hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
         >
-          {loading ? "Signing in…" : "Sign in"}
+          {loading ? t.auth.signingIn : t.auth.signIn}
         </button>
       </form>
       <p className="mt-5 text-center text-sm text-zinc-500">
-        No account?{" "}
+        {t.auth.noAccount}{" "}
         <Link href="/signup" className="text-blue-600 hover:underline">
-          Sign up free
+          {t.auth.signUpFree}
         </Link>
       </p>
     </AuthLayout>

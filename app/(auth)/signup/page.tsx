@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import Image from "next/image";
 import Footer from "@/components/footer";
+import { useLocale } from "@/components/locale-provider";
 
 export default function SignupPage() {
   const router = useRouter();
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -38,16 +40,16 @@ export default function SignupPage() {
         </Link>
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8">
           <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">
-            Create your account
+            {t.auth.signupTitle}
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-            Free — 5 videos / month, up to 2 min each
+            {t.auth.signupSubtitle}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                Email
+                {t.auth.email}
               </label>
               <input
                 type="email"
@@ -59,7 +61,7 @@ export default function SignupPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                Password
+                {t.auth.password}
               </label>
               <input
                 type="password"
@@ -69,7 +71,7 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <p className="text-xs text-zinc-400 mt-1">Minimum 8 characters</p>
+              <p className="text-xs text-zinc-400 mt-1">{t.auth.passwordHint}</p>
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <button
@@ -77,14 +79,14 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full py-2.5 bg-zinc-900 text-white rounded-lg font-medium hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
             >
-              {loading ? "Creating account…" : "Create account"}
+              {loading ? t.auth.creating : t.auth.createAccount}
             </button>
           </form>
 
           <p className="mt-5 text-center text-sm text-zinc-500">
-            Already have an account?{" "}
+            {t.auth.haveAccount}{" "}
             <Link href="/login" className="text-blue-600 hover:underline">
-              Sign in
+              {t.auth.signIn}
             </Link>
           </p>
         </div>

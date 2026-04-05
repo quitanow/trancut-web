@@ -5,8 +5,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import Image from "next/image";
 import Footer from "@/components/footer";
+import { useLocale } from "@/components/locale-provider";
 
 export default function ForgotPasswordPage() {
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,24 +44,24 @@ export default function ForgotPasswordPage() {
               <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
                 <span className="text-green-600 text-xl">✓</span>
               </div>
-              <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Check your email</h1>
+              <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">{t.auth.checkEmail}</h1>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-                We sent a password reset link to <strong>{email}</strong>
+                {t.auth.checkEmailMsg} <strong>{email}</strong>
               </p>
               <Link href="/login" className="text-sm text-blue-600 hover:underline">
-                Back to sign in
+                {t.auth.backToSignIn}
               </Link>
             </div>
           ) : (
             <>
-              <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">Reset password</h1>
+              <h1 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">{t.auth.resetTitle}</h1>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-                Enter your email and we'll send you a reset link.
+                {t.auth.resetSubtitle}
               </p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                    Email
+                    {t.auth.email}
                   </label>
                   <input
                     type="email"
@@ -75,12 +77,12 @@ export default function ForgotPasswordPage() {
                   disabled={loading}
                   className="w-full py-2.5 bg-zinc-900 text-white rounded-lg font-medium hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50"
                 >
-                  {loading ? "Sending…" : "Send reset link"}
+                  {loading ? t.auth.sending : t.auth.sendResetLink}
                 </button>
               </form>
               <p className="mt-5 text-center text-sm text-zinc-500">
                 <Link href="/login" className="text-blue-600 hover:underline">
-                  Back to sign in
+                  {t.auth.backToSignIn}
                 </Link>
               </p>
             </>
