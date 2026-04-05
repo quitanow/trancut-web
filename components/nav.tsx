@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase";
 import { getMe, createPortalSession, type Me } from "@/lib/api";
 import { useLocale } from "@/components/locale-provider";
 import LanguageSwitcher from "@/components/language-switcher";
-import { Upload, Clock, LogOut, CreditCard, Sparkles } from "lucide-react";
+import { LogOut, CreditCard } from "lucide-react";
 
 const TIER_LABELS: Record<string, string> = { free: "Free", basic: "Basic", pro: "Pro" };
 const TIER_COLORS: Record<string, string> = {
@@ -33,9 +33,9 @@ export default function Nav() {
   }, []);
 
   const links = [
-    { href: "/upload", label: t.nav.upload, icon: Upload },
-    { href: "/jobs", label: t.nav.history, icon: Clock },
-    { href: "/pricing", label: "Pricing", icon: Sparkles },
+    { href: "/upload", label: t.nav.upload },
+    { href: "/jobs", label: t.nav.history, mobileHidden: true },
+    { href: "/pricing", label: "Pricing" },
   ];
 
   async function handleManageBilling() {
@@ -57,58 +57,48 @@ export default function Nav() {
   }
 
   return (
-    <nav className="border-b border-zinc-100 dark:border-zinc-800 px-6 py-3 flex justify-between items-center">
-      <div className="flex items-center gap-6">
+    <nav className="border-b border-zinc-100 dark:border-zinc-800 px-4 py-3 flex justify-between items-center">
+      <div className="flex items-center gap-3">
         <Link href="/upload" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="TranCut" width={28} height={28} className="rounded-md" />
+          <Image src="/logo.png" alt="TranCut" width={26} height={26} className="rounded-md" />
           <span className="font-bold tracking-tight">TranCut</span>
         </Link>
-        <div className="flex gap-1">
-          {links.map(({ href, label, icon: Icon }) => (
+        <div className="flex gap-0.5">
+          {links.map(({ href, label, mobileHidden }) => (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-colors ${
+              className={`text-sm px-2.5 py-1.5 rounded-lg transition-colors ${
+                mobileHidden ? "hidden sm:block" : ""
+              } ${
                 pathname === href
                   ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-medium"
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
               }`}
             >
-              <Icon size={14} />
               {label}
             </Link>
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {me && (
-          <>
-            {!me.has_billing && (
-              <Link
-                href="/pricing"
-                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-              >
-                Upgrade
-              </Link>
-            )}
-            <button
-              onClick={handleManageBilling}
-              className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-              title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
-            >
-              <CreditCard size={11} />
-              {TIER_LABELS[me.tier] ?? me.tier}
-              {!me.has_billing && <span className="opacity-70">· Upgrade ↑</span>}
-            </button>
-          </>
+          <button
+            onClick={handleManageBilling}
+            className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
+            title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
+          >
+            <CreditCard size={11} />
+            {TIER_LABELS[me.tier] ?? me.tier}
+          </button>
         )}
         <LanguageSwitcher />
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+          className="flex items-center gap-1 text-sm text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
         >
           <LogOut size={14} />
-          {t.nav.signOut}
+          <span className="hidden sm:inline">{t.nav.signOut}</span>
         </button>
       </div>
     </nav>
