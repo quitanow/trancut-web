@@ -19,16 +19,16 @@ export default function LandingPage() {
           <span className="font-bold tracking-tight">TranCut</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="hidden sm:block"><LanguageSwitcher /></span>
+          <LanguageSwitcher />
           <Link
             href="/login"
-            className="hidden sm:inline-flex text-sm px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+            className="text-sm px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
           >
             {t.nav.login}
           </Link>
           <Link
             href="/signup"
-            className="text-sm px-3 py-1.5 rounded-lg bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
+            className="hidden sm:inline-flex text-sm px-3 py-1.5 rounded-lg bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
           >
             {t.nav.getStarted}
           </Link>
