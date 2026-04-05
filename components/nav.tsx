@@ -34,7 +34,7 @@ export default function Nav() {
 
   const links = [
     { href: "/upload", label: t.nav.upload },
-    { href: "/jobs", label: t.nav.history, mobileHidden: true },
+    { href: "/jobs", label: t.nav.history },
     { href: "/pricing", label: "Pricing" },
   ];
 
@@ -85,7 +85,7 @@ export default function Nav() {
         {me && (
           <button
             onClick={handleManageBilling}
-            className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
+            className={`hidden sm:flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
             title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
           >
             <CreditCard size={11} />
