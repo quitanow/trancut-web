@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase";
 import { createCheckoutSession } from "@/lib/api";
+import { isNativeApp } from "@/lib/platform";
 import { Loader2 } from "lucide-react";
 
 function CheckoutRedirect() {
@@ -15,6 +16,11 @@ function CheckoutRedirect() {
 
   useEffect(() => {
     (async () => {
+      if (isNativeApp()) {
+        setError("Purchases are not available inside the iOS app.");
+        return;
+      }
+
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {

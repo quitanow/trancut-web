@@ -2,13 +2,20 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Subtitles, Zap, Globe, Download } from "lucide-react";
 import { useLocale } from "@/components/locale-provider";
 import LanguageSwitcher from "@/components/language-switcher";
 import Footer from "@/components/footer";
+import { isNativeApp } from "@/lib/platform";
 
 export default function LandingPage() {
   const { t } = useLocale();
+  const [native, setNative] = useState(false);
+
+  useEffect(() => {
+    setNative(isNativeApp());
+  }, []);
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
@@ -82,6 +89,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
+      {!native && (
       <section id="pricing" className="border-t border-zinc-100 dark:border-zinc-800 px-5 py-6 text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">
@@ -114,6 +122,7 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+      )}
 
       <Footer />
     </div>

@@ -49,7 +49,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="4. Data Retention">
-          <p>Uploaded video files are automatically deleted within 24 hours of processing. Account data is retained as long as your account is active. You may request deletion at any time by contacting us.</p>
+          <p>Uploaded video files are automatically deleted within 24 hours of processing. Account data is retained as long as your account is active. You can delete your account at any time from the Account page inside the app.</p>
         </Section>
 
         <Section title="5. Security">
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="6. Your Rights">
-          <p>You may request access to, correction of, or deletion of your personal data at any time by emailing <a href="mailto:support@trancut.com" className="text-blue-600">support@trancut.com</a>.</p>
+          <p>You may request access to or correction of your personal data by emailing <a href="mailto:support@trancut.com" className="text-blue-600">support@trancut.com</a>. You may delete your account directly from the Account page inside the app.</p>
         </Section>
 
         <Section title="7. Children">

@@ -24,6 +24,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>TranCut uses the camera so you can capture media to upload for transcription and translation.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>TranCut uses the microphone when recording video so uploaded media includes audio for transcription.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>TranCut uses your photo library so you can choose videos to upload for transcription and translation.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

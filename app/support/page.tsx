@@ -43,12 +43,8 @@ export default function SupportPage() {
             a="You can download an SRT subtitle file, a video with burned-in subtitles, or an AI-dubbed MP4."
           />
           <FAQ
-            q="How do I manage or cancel my subscription?"
-            a="Go to the app and click your plan badge in the top navigation. This opens the billing portal where you can update or cancel your subscription at any time."
-          />
-          <FAQ
-            q="Can I buy extra videos without upgrading?"
-            a="Yes — you can purchase 10 extra videos for $2.99 anytime from the billing portal, with no plan change required."
+            q="How do I delete my account?"
+            a="Open the Account page inside the app and use the Delete account option. If you need help, contact support and we can assist."
           />
           <FAQ
             q="My video failed to process. What should I do?"

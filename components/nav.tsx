@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase";
 import { getMe, createPortalSession, type Me } from "@/lib/api";
 import { useLocale } from "@/components/locale-provider";
 import LanguageSwitcher from "@/components/language-switcher";
+import { isNativeApp } from "@/lib/platform";
 import { LogOut } from "lucide-react";
 
 const TIER_LABELS: Record<string, string> = { free: "Free", basic: "Basic", pro: "Pro" };
@@ -21,8 +22,11 @@ export default function Nav() {
   const router = useRouter();
   const { t } = useLocale();
   const [me, setMe] = useState<Me | null>(null);
+  const [native, setNative] = useState(false);
 
   useEffect(() => {
+    setNative(isNativeApp());
+
     (async () => {
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
@@ -34,10 +38,16 @@ export default function Nav() {
   const links = [
     { href: "/upload", label: t.nav.upload },
     { href: "/jobs", label: t.nav.history },
-    { href: "/pricing", label: "Pricing" },
+    ...(native ? [] : [{ href: "/pricing", label: "Pricing" }]),
+    { href: "/account", label: "Account" },
   ];
 
   async function handleManageBilling() {
+    if (native) {
+      router.push("/account");
+      return;
+    }
+
     const supabase = createClient();
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
@@ -75,7 +85,7 @@ export default function Nav() {
         <button
           onClick={handleManageBilling}
           className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-          title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
+          title={native ? "Account settings" : me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
         >
           {TIER_LABELS[me.tier] ?? me.tier}
         </button>
