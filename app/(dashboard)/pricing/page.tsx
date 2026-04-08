@@ -10,7 +10,7 @@ import { isNativeApp } from "@/lib/platform";
 export default function PricingPage() {
   const { locale } = useLocale();
   const p = pricingPageTranslations[locale];
-  const [native, setNative] = useState(false);
+  const [native, setNative] = useState<boolean | null>(null);
 
   useEffect(() => {
     setNative(isNativeApp());
@@ -22,7 +22,7 @@ export default function PricingPage() {
     { tier: "Pro", price: "$9.99 / mo", features: p.proFeatures, cta: { label: p.subscribePro, href: "/billing/checkout?plan=pro" }, highlight: true },
   ];
 
-  if (native) {
+  if (native !== false) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Plan information</h1>

@@ -22,7 +22,7 @@ export default function Nav() {
   const router = useRouter();
   const { t } = useLocale();
   const [me, setMe] = useState<Me | null>(null);
-  const [native, setNative] = useState(false);
+  const [native, setNative] = useState<boolean | null>(null);
 
   useEffect(() => {
     setNative(isNativeApp());
@@ -38,12 +38,12 @@ export default function Nav() {
   const links = [
     { href: "/upload", label: t.nav.upload },
     { href: "/jobs", label: t.nav.history },
-    ...(native ? [] : [{ href: "/pricing", label: "Pricing" }]),
+    ...(native === false ? [{ href: "/pricing", label: "Pricing" }] : []),
     { href: "/account", label: "Account" },
   ];
 
   async function handleManageBilling() {
-    if (native) {
+    if (native === true) {
       router.push("/account");
       return;
     }
@@ -85,7 +85,7 @@ export default function Nav() {
         <button
           onClick={handleManageBilling}
           className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-          title={native ? "Account settings" : me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
+          title={native === true ? "Account settings" : me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
         >
           {TIER_LABELS[me.tier] ?? me.tier}
         </button>

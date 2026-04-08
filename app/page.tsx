@@ -11,7 +11,7 @@ import { isNativeApp } from "@/lib/platform";
 
 export default function LandingPage() {
   const { t } = useLocale();
-  const [native, setNative] = useState(false);
+  const [native, setNative] = useState<boolean | null>(null);
 
   useEffect(() => {
     setNative(isNativeApp());
@@ -89,7 +89,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      {!native && (
+      {native === false && (
       <section id="pricing" className="border-t border-zinc-100 dark:border-zinc-800 px-5 py-6 text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">
