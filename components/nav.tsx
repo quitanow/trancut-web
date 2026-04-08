@@ -38,7 +38,6 @@ export default function Nav() {
   const links = [
     { href: "/upload", label: t.nav.upload },
     { href: "/jobs", label: t.nav.history },
-    ...(native === false ? [{ href: "/pricing", label: "Pricing" }] : []),
     { href: "/account", label: "Account" },
   ];
 
@@ -81,11 +80,11 @@ export default function Nav() {
         </Link>
       ))}
       <span className="text-zinc-200 dark:text-zinc-700 px-1">·</span>
-      {me && (
+      {me && native === false && (
         <button
           onClick={handleManageBilling}
           className={`text-xs font-medium px-2 py-1 rounded-full transition-colors ${TIER_COLORS[me.tier] ?? TIER_COLORS.free}`}
-          title={native === true ? "Account settings" : me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
+          title={me.has_billing ? "Manage billing" : "Upgrade to Basic or Pro"}
         >
           {TIER_LABELS[me.tier] ?? me.tier}
         </button>

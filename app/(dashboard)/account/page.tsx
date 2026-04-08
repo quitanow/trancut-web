@@ -66,10 +66,6 @@ export default function AccountPage() {
         <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4">
           Deleting your account permanently removes your TranCut account. This action cannot be undone.
         </p>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-6">
-          If you have an active paid subscription purchased outside the iOS app, cancel it first from the original purchase channel before deleting your account.
-        </p>
-
         {error && (
           <p className="text-sm text-red-600 dark:text-red-400 mb-4">{error}</p>
         )}
